@@ -1,0 +1,45 @@
+<div class="row login">
+  <div class="col l4 m4 s6">
+    <div class="row">
+      <div class="col l2 offset-l5">
+        <h4>PLIT</h4>
+      </div>
+    </div>
+    <div class="valign-wrapper">
+      <form [formGroup]="loginForm" class="col l12" (ngSubmit)="login()">
+        <div class="row">
+          <div class="input-field col l2 offset-l1 s12">
+            <input id="username" type="text" class="validate" formControlName="username">
+            <label for="username">Username</label>
+            <span class="helper-text" *ngIf="formControls.username.invalid && isSubmitted === true">
+              Username is required.
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col l2 offset-l1 s12">
+            <input id="password" type="password" class="validate" formControlName="password">
+            <label for="password">Password</label>
+            <span class="helper-text" *ngIf="formControls.password.invalid && isSubmitted === true">
+              Password is required.
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col l2 offset-l1 s12 center-align">
+            <button class="btn waves-effect waves-light blue lighten-1">
+              <input type="submit" value="Login">
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col l2 offset-l1 s12 center-align" *ngIf="isUser === false">
+              Username or password is incorrect.
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="tint col l8 m8 s6 background z-depth-2">
+  </div>
+</div>

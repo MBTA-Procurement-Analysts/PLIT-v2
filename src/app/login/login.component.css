@@ -1,0 +1,20 @@
+.valign-wrapper {
+  margin: 0px;
+	padding:0px;
+	float: left;
+	width:100%;
+	position:absolute;
+	top: 45%;
+	transform: translateY(-50%) translateX(-50%);
+	left:50%;
+}
+
+.background {
+  background-image: url("../../assets/img/boston.jpg");
+  background-size: cover;
+  background-position: center center;
+  min-height: 100vh;
+}
+.tint {
+  box-shadow: 0 3000px rgba(0,191,255, 0.4) inset;
+}
