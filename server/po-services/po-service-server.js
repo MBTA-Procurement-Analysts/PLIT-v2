@@ -3,6 +3,7 @@ var poModel = require("./po-model");
 
 app.get('/api/po/:number', findPO);
 app.get('/api/collection-list', getCollections);
+app.get('/api/POPA', findPA);
 
 function findPO(req,res){
     console.log("PO NUMBER: " + req.params.number);
@@ -13,6 +14,16 @@ function findPO(req,res){
             console.log(val);
             res.json(val);
         })
+}
+function findPA(req, res) {
+  console.log("finding PA service call made");
+  poModel
+    .findPA()
+    .then(function(pos) {
+      res.send(pos);
+    }, function (err) {
+      res.send(err);
+    })
 }
 
 function getCollections(req,res){
