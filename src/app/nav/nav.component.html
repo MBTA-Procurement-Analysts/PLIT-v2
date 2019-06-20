@@ -1,0 +1,16 @@
+<div class='navbar-fixed' *ngIf="router.url !== '/login'">
+  <nav>
+    <div class="nav-wrapper white">
+      <ul id="nav-mobile" class="left hide-on-down black-text">
+        <li *ngIf="initialUser.role === 'Admin'"><a [routerLink]="['admin']">Admin</a></li>
+        <li><a [routerLink]="['dashboard']">Dashboard</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="right left hide-on-down">
+        <!-- <li><app-impersonation></app-impersonation></li> -->
+        <li>{{currentUser.fullname | uppercase }}</li>
+        <li><a class="material-icons logout" [routerLink]="['login']">exit_to_app</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
