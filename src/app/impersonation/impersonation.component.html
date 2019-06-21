@@ -1,17 +1,12 @@
 <div class="container">
-
-<div class="row">
-  <div class="col l10">
-    <h3>
-      {{initialUser.fullname}}
-    </h3>
-    <ul class="users collection">
+  <div class="row">
+    <ul class="users collection dropdown-content" id="dropdown1">
       <li class="collection-item" *ngFor="let user of users">
-        <a routerLink="/dashboard" (click)="changeUser(user._id)">
+        <a routerLink="/dashboard" (click)="changeUser(user._id)" class="black-text">
           {{user.fullname}}
         </a>
       </li>
     </ul>
+    <a class='dropdown-trigger black-text' data-target='dropdown1'>{{currentUser.username}}</a>
   </div>
-</div>
 </div>

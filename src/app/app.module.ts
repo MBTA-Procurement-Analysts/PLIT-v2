@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatTableModule} from '@angular/material/table';
 
 import { AuthService } from './services/auth.service'
 import { AuthGuard } from './auth.guard';
@@ -14,6 +16,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ImpersonationComponent } from './impersonation/impersonation.component';
 import { NavComponent } from './nav/nav.component';
 import { ReqComponent } from './req/req.component';
+import { ReqDetailsComponent } from './req-details/req-details.component';
 
 @NgModule({
   declarations: [
@@ -23,14 +26,17 @@ import { ReqComponent } from './req/req.component';
     AdminComponent,
     ImpersonationComponent,
     NavComponent,
-    ReqComponent
+    ReqComponent,
+    ReqDetailsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatTableModule
   ],
   providers: [
     AuthService,

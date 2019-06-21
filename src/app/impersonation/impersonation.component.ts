@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user';
 import { AuthService } from '../services/auth.service';
+declare var $: any;
 
 @Component({
   selector: 'app-impersonation',
@@ -19,10 +20,11 @@ export class ImpersonationComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
+    $('.dropdown-trigger').dropdown({ constrainWidth: false });
     this.getUsers();
     this.authService.globalCurrentUser.subscribe(user => this.currentUser = user);
     this.authService.globalInitialUser.subscribe(user => this.initialUser = user);

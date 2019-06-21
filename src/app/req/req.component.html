@@ -1,25 +1,83 @@
-<div class="container">
-  <ul class="actionReqs collection">
-    <li class="collection-item" *ngFor="let actionReq of actionReqs">
-      {{actionReq.REQ_No}}
-    </li>
-  </ul>
+<div class="row top-row">
+   <div class="col l12">
+     <ul class="tabs">
+       <li class="tab col s3"><a href="#all">All</a></li>
+       <li class="tab col s3"><a href="#action">Action</a></li>
+       <li class="tab col s3"><a href="#hold">Hold</a></li>
+       <li class="tab col s3"><a href="#transmission">Transmission</a></li>
+     </ul>
+   </div>
 
-  <ul class="transmissionReqs collection">
-    <li class="collection-item" *ngFor="let transmissionReq of transmissionReqs">
-      {{transmissionReq.REQ_No}}
-    </li>
-  </ul>
+   <div class="col l12" id="all">
+    <table mat-table [dataSource]="allReqs" class="mat-elevation-z8">
+      <ng-container matColumnDef="Business Unit">
+        <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+        <td mat-cell *matCellDef="let all"> {{all.Business_Unit}} </td>
+      </ng-container>
 
-  <ul class="holdReqs collection">
-    <li class="collection-item" *ngFor="let holdReq of holdReqs">
-      {{holdReq.REQ_No}}
-    </li>
-  </ul>
+      <ng-container matColumnDef="Req ID">
+        <th mat-header-cell *matHeaderCellDef> Req ID </th>
+        <td mat-cell *matCellDef="let all"> {{all.Req_ID}} </td>
+      </ng-container>
 
-  <ul class="allReqs collection">
-    <li class="collection-item" *ngFor="let allReq of allReqs">
-      {{allReq.REQ_No}}
-    </li>
-  </ul>
+      <ng-container matColumnDef="">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let all"> {{all.Req_ID}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let all; columns: displayedColumns;"></tr>
+    </table>
+   </div>
+
+   <div class="col l12" id="action">
+    <table mat-table [dataSource]="actionReqs" class="mat-elevation-z8 ">
+      <ng-container matColumnDef="Business Unit">
+        <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+        <td mat-cell *matCellDef="let action"> {{action.Business_Unit}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Req ID">
+        <th mat-header-cell *matHeaderCellDef> Req ID </th>
+        <td mat-cell *matCellDef="let action"> {{action.Req_ID}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky"></tr>
+      <tr mat-row *matRowDef="let action; columns: displayedColumns;" class="green lighten-4 collection-item"></tr>
+    </table>
+  </div>
+
+  <div class="col l12" id="hold">
+   <table mat-table [dataSource]="holdReqs" class="mat-elevation-z8">
+     <ng-container matColumnDef="Business Unit">
+       <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+       <td mat-cell *matCellDef="let hold"> {{hold.Business_Unit}} </td>
+     </ng-container>
+
+     <ng-container matColumnDef="Req ID">
+       <th mat-header-cell *matHeaderCellDef> Req ID </th>
+       <td mat-cell *matCellDef="let hold"> {{hold.Req_ID}} </td>
+     </ng-container>
+
+     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+     <tr mat-row *matRowDef="let hold; columns: displayedColumns;" class="yellow lighten-4"></tr>
+   </table>
+  </div>
+
+  <div class="col l12" id="transmission">
+   <table mat-table [dataSource]="transmissionReqs" class="mat-elevation-z8">
+     <ng-container matColumnDef="Business Unit">
+       <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+       <td mat-cell *matCellDef="let transmission"> {{transmission.Business_Unit}} </td>
+     </ng-container>
+
+     <ng-container matColumnDef="Req ID">
+       <th mat-header-cell *matHeaderCellDef> Req ID </th>
+       <td mat-cell *matCellDef="let transmission"> {{transmission.Req_ID}} </td>
+     </ng-container>
+
+     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+     <tr mat-row *matRowDef="let transmission; columns: displayedColumns;" class="red lighten-4"></tr>
+   </table>
+  </div>
 </div>
