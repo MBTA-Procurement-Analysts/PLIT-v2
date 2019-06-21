@@ -86,12 +86,10 @@ export class AuthService {
 
   changeUser(user: User) {
     this.currentUser = user;
-    console.log(this.currentUser);
   }
 
   setInitialUser(user: User) {
     this.initialUser = user;
-    console.log(this.initialUser);
   }
 
 

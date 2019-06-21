@@ -3,6 +3,9 @@ import { ReqService } from '../services/req.service';
 import { Req } from '../models/req';
 import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
+import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+declare var $:any;
 
 @Component({
   selector: 'app-req',
@@ -10,6 +13,7 @@ import { User } from '../models/user';
   styleUrls: ['./req.component.css']
 })
 export class ReqComponent implements OnInit {
+  displayedColumns: string[] = ['Business Unit', 'Req ID'];
   allReqs: Req[];
   actionReqs: Req[];
   holdReqs: Req[];
@@ -20,18 +24,22 @@ export class ReqComponent implements OnInit {
 
   constructor(
     private reqService: ReqService,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
+    $(document).ready(function(){
+      $('.tabs').tabs();
+    });
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.authService.globalCurrentUser.subscribe(user => this.currentUser = user);
+      this.getReqs(this.currentUser.username.toUpperCase());
+    });
     this.authService.globalCurrentUser.subscribe(user => this.currentUser = user);
     this.getReqs(this.currentUser.username.toUpperCase());
-  }
-
-  ngAfterViewChecked() {
-    if(this.reqsArrayLength !== 0) {
-      this.sortReqs();
-    }
   }
 
   getReqs(user: string) {
@@ -39,39 +47,37 @@ export class ReqComponent implements OnInit {
     .subscribe(
       reqs => {
         this.allReqs = reqs;
-        this.reqsArrayLength = this.allReqs.length;
+        this.reqsArrayLength = reqs.length;
+        console.log(this.reqsArrayLength);
+        this.transmissionReqs = [];
+        this.holdReqs = [];
+        this.actionReqs = [];
+
+        for(var i = 0; i < this.reqsArrayLength; i++) {
+          this.tempReq = {
+            _id: this.allReqs[i]._id,
+            REQ_No: this.allReqs[i].REQ_No,
+            Req_ID: this.allReqs[i].Req_ID,
+            Business_Unit: this.allReqs[i].Business_Unit,
+            Buyer: this.allReqs[i].Buyer,
+            Hold_From_Further_Processing: this.allReqs[i].Hold_From_Further_Processing,
+            Hold_Status: this.allReqs[i].Hold_Status,
+            Sourcing: this.allReqs[i].Sourcing,
+            Lines_Not_Sourced: this.allReqs[i].Lines_Not_Sourced,
+            Out_To_Bid: this.allReqs[i].Out_To_Bid,
+            Transmitted: this.allReqs[i].Transmitted,
+            Transmitted_Time: this.allReqs[i].Transmitted_Time
+          }
+
+          if(this.tempReq.Transmitted === 'Y') {
+            this.transmissionReqs.push(this.tempReq);
+          } else if(this.tempReq.Hold_From_Further_Processing === 'Y') {
+            this.holdReqs.push(this.tempReq);
+          } else {
+            this.actionReqs.push(this.tempReq);
+          }
+        }
       }
     );
-  }
-
-  sortReqs() {
-    this.getReqs(this.currentUser.username.toUpperCase());
-    console.log(this.allReqs);
-    for(var i = 0; i < this.reqsArrayLength; i++) {
-      this.tempReq = {
-        _id: this.allReqs[i]._id,
-        REQ_No: this.allReqs[i].REQ_No,
-        Req_ID: this.allReqs[i].Req_ID,
-        Business_Unit: this.allReqs[i].Business_Unit,
-        Buyer: this.allReqs[i].Buyer,
-        Hold_From_Further_Processing: this.allReqs[i].Hold_From_Further_Processing,
-        Hold_Status: this.allReqs[i].Hold_Status,
-        Sourcing: this.allReqs[i].Sourcing,
-        Lines_Not_Sourced: this.allReqs[i].Lines_Not_Sourced,
-        Out_To_Bid: this.allReqs[i].Out_To_Bid,
-        Transmitted: this.allReqs[i].Transmitted,
-        Transmitted_Time: this.allReqs[i].Transmitted_Time
-      }
-
-      if(this.tempReq.Transmitted === 'Y') {
-        this.transmissionReqs.push(this.tempReq);
-      } else if(this.tempReq.Hold_From_Further_Processing === 'Y') {
-        console.log("hit");
-        this.holdReqs.push(this.tempReq);
-      } else {
-        console.log(this.tempReq);
-        this.actionReqs.concat(this.tempReq);
-      }
-    }
   }
 }
