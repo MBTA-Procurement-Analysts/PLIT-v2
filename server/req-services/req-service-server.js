@@ -7,7 +7,17 @@ app.get('/api/req/date/:date', getReqsForDate);
 app.post('/api/add-note/:reqId', addNote);
 app.put('/api/req/addFlag/:reqId', addFlag);
 app.put('/api/req/unFlag/:reqId', unFlag);
+app.get('/api/reqs/:buyer', getReqsForBuyer);
 
+function getReqsForBuyer(req, res) {
+  reqModel
+    .getReqsForBuyer(req.params.buyer)
+    .then(function(reqs) {
+      res.send(reqs);
+    }, function (err) {
+      res.send(err);
+    });
+}
 function addNote(req, res){
     reqModel
         .addNote(req.params.reqId, req.body)
