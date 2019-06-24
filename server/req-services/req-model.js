@@ -4,6 +4,7 @@ var reqModel = mongoose.model('REQModel',reqSchema);
 reqModel.findReq = findReq;
 reqModel.addNote = addNote;
 reqModel.getBuyerReqsForDate = getBuyerReqsForDate;
+reqModel.getReqsForBuyer = getReqsForBuyer;
 reqModel.getReqsForDate = getReqsForDate;
 reqModel.addFlag = addFlag;
 reqModel.unFlag = unFlag;
@@ -51,7 +52,10 @@ function getBuyerReqsForDate(buyer, date){
     console.log(buyer + " " + new Date(utcDate).toISOString());
     return reqModel.find({"Buyer": buyer, "Approved_On":  new Date(utcDate)});
 }
-
+function getReqsForBuyer(buyer) {
+  console.log('getting req for buyer');
+  return reqModel.find({"Buyer": buyer});
+}
 function getReqsForDate(date){
     var utcDate = new Date(date)
     utcDate.setTime(utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000);
