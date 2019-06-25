@@ -1,11 +1,35 @@
 .logout {
-  margin-top: 20px;
+  color: black;
+  margin-top: 8px;
 }
 
-nav ul a:hover {
-    background-color: rgba(0, 0, 0, 0) !important;
+::ng-deep .mat-toolbar span a:hover {
+  color: #4ca6ee;
 }
 
-nav ul li a {
-  text-decoration: bold;
+::ng-deep .mat-toolbar span:hover {
+  color: #4ca6ee;
+}
+
+::ng-deep .mat-toolbar {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 998;
+}
+
+.title {
+  padding-right: 170px;
+}
+
+.links {
+  font-size: 14px;
+}
+
+.example-fill-remaining-space {
+  /* This fills the remaining space, by using flexbox.
+     Every toolbar row uses a flexbox row layout. */
+  flex: 1 1 auto;
 }

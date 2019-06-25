@@ -1,6 +1,34 @@
-.top-row {
-  padding-top: 10px;
+.req-container {
+  margin: 50px;
 }
-ul li a {
-  color: black;
+
+.example-container {
+  margin: 25px;
+  height: 600px;
+  overflow: scroll;
+}
+
+mat-tab-group {
+  width: 100%;
+}
+
+mat-chip {
+    transition: none !important;
+    box-shadow: none !important;
+}
+
+table {
+  width: 100%;
+}
+
+.action-chip {
+  background-color: green;
+}
+
+.hold-chip {
+  background-color: yellow;
+}
+
+.transmission-chip {
+  background-color: red;
 }
