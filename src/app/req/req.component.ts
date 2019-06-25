@@ -5,7 +5,6 @@ import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-declare var $:any;
 
 @Component({
   selector: 'app-req',
@@ -29,9 +28,6 @@ export class ReqComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    $(document).ready(function(){
-      $('.tabs').tabs();
-    });
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationEnd)
     ).subscribe(() => {
@@ -48,7 +44,6 @@ export class ReqComponent implements OnInit {
       reqs => {
         this.allReqs = reqs;
         this.reqsArrayLength = reqs.length;
-        console.log(this.reqsArrayLength);
         this.transmissionReqs = [];
         this.holdReqs = [];
         this.actionReqs = [];

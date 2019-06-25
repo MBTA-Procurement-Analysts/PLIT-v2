@@ -1,12 +1,8 @@
-<div class="container">
-  <div class="row">
-    <ul class="users collection dropdown-content" id="dropdown1">
-      <li class="collection-item" *ngFor="let user of users">
-        <a routerLink="/dashboard" (click)="changeUser(user._id)" class="black-text">
-          {{user.fullname}}
-        </a>
-      </li>
-    </ul>
-    <a class='dropdown-trigger black-text' data-target='dropdown1'>{{currentUser.username}}</a>
-  </div>
-</div>
+<mat-form-field class="mat-select-content">
+  <mat-label>{{currentUser.fullname}}</mat-label>
+  <mat-select>
+    <mat-option [routerLink]="['dashboard']" *ngFor="let user of users" (click)="changeUser(user._id)">
+      {{user.fullname}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

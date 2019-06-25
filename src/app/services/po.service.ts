@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../models/user';
+import { Po } from '../models/po';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-  private usersUrl = 'http://localhost:3000/api/users';
+export class PoService {
+  private posUrl = 'http://localhost:3000/api/POPA';
 
   constructor(
     private http: HttpClient
   ) { }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.usersUrl)
+  getPos(): Observable<Po[]> {
+    return this.http.get<Po[]>(this.posUrl);
   }
 }

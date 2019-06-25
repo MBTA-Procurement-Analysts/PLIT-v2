@@ -1,5 +1,11 @@
-.sidebar {
-  background-color: #293142;
+.example-container {
+  min-width: 100vw;
+  height: 100vh;
+  margin-top: 60px;
+}
+
+mat-drawer {
   position: fixed;
-  min-height: 100vh;
+  background-color: #293142;
+  width: 200px;
 }
