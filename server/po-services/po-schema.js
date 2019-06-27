@@ -8,6 +8,8 @@ var poSchema = new mongoose.Schema({
     "PO_Date": Date,
     "Status": String,
     "Vendor_Name": String,
+    "Instanct_Avail_Date/Time": Date,
+    "WorkedDate/Time": Date,
     "lines": [{
         "Line_No": Number,
         "Mfg_Id":String,
