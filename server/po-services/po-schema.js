@@ -8,8 +8,6 @@ var poSchema = new mongoose.Schema({
     "PO_Date": Date,
     "Status": String,
     "Vendor_Name": String,
-    "Instanct_Avail_Date/Time": Date,
-    "WorkedDate/Time": Date,
     "lines": [{
         "Line_No": Number,
         "Mfg_Id":String,
@@ -25,7 +23,23 @@ var poSchema = new mongoose.Schema({
             "Req_ID": String,
             "Line_No": Number
         }
-    }]
+    }],
+  "worklist": [{
+                      "Appr_Inst": Number,
+                      "Work_List": String,
+                      "Approval_Number": String,
+                      "Appr_Stat": String,
+                      "Denial_Date_Time": Date,
+                      "User": String,
+                      "Unit": String,
+                      "PO_HDR_Status": String,
+                      "WF_APPR_Status": String,
+                      "Dispatch_DTTM": Date,
+                      "Threshold": String,
+                      "Buyer": String,
+                      "PO_Hdr_Created_Date": Date,
+                      "SUM_MERCHANDISE_AMT": Number,
+  }]
 },{"collection":"PO_DATA"});
 
 module.exports = poSchema;
