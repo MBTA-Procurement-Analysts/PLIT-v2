@@ -1,11 +1,44 @@
-.example-container {
-  min-width: 100vw;
-  height: 100vh;
-  margin-top: 60px;
+.container {
+  margin-left: 200px;
 }
 
-mat-drawer {
-  position: fixed;
-  background-color: #293142;
-  width: 200px;
+.req-container {
+  padding: 20px;
+  margin-top: 100px;
+  margin-right: 25px;
+  margin-left: 25px;
+  background-color: white;
+}
+
+.table-container {
+  margin: 25px;
+}
+
+mat-tab-group {
+  width: 100%;
+}
+
+mat-chip {
+    transition: none !important;
+    box-shadow: none !important;
+}
+
+table {
+  width: 100%;
+}
+
+.action-chip {
+  background-color: green;
+}
+
+.hold-chip {
+  background-color: yellow;
+}
+
+.transmission-chip {
+  background-color: red;
+}
+
+th:nth-child(1) {
+    width: 1%;
 }

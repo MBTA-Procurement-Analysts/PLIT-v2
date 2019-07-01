@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-declare var $: any;
-
 
 @Component({
   selector: 'app-req-details',
@@ -12,7 +10,6 @@ export class ReqDetailsComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-      $('.dropdown-trigger').dropdown({ constrainWidth: false });
   }
 
 }

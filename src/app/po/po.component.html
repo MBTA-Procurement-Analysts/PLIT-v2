@@ -1,16 +1,35 @@
-<!-- <div class="col l12 example-container" id="transmission">
- <table mat-table [dataSource]="pos" class="mat-elevation">
-   <ng-container matColumnDef="poNo">
-     <th mat-header-cell *matHeaderCellDef>PO Number</th>
-     <td mat-cell *matCellDef="let po"> {{po.PO_No}} </td>
-   </ng-container>
+<div class="container">
+  <div class="po-container mat-elevation-z3">
+    <div class="mat-display-1">
+      Pending POs
+    </div>
+    <div class="table-container">
 
-   <ng-container matColumnDef="businessUnit">
-     <th mat-header-cell *matHeaderCellDef>Business Unit</th>
-     <td mat-cell *matCellDef="let "po"> {{po.Business_Unit}} </td>
-   </ng-container>
+     <table *ngIf="pos" mat-table [dataSource]="pos" class="mat-elevation">
+       <ng-container matColumnDef="Business Unit">
+         <th mat-header-cell *matHeaderCellDef>Business Unit</th>
+         <td mat-cell *matCellDef="let po"> {{po.Business_Unit}} </td>
+       </ng-container>
 
-   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="white"></tr>
-   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
- </table>
-</div> -->
+       <ng-container matColumnDef="Po No">
+         <th mat-header-cell *matHeaderCellDef>PO Number</th>
+         <td mat-cell *matCellDef="let po"> {{po.PO_No}} </td>
+       </ng-container>
+
+
+       <ng-container matColumnDef="Po Date">
+         <th mat-header-cell *matHeaderCellDef>Days Since Creation</th>
+         <td mat-cell *matCellDef="let po"> {{ getDateDifference(po.PO_Date) }} </td>
+       </ng-container>
+
+       <ng-container matColumnDef="Vendor">
+         <th mat-header-cell *matHeaderCellDef> Vendor </th>
+         <td mat-cell *matCellDef="let po"> {{ po.Vendor_Name }} </td>
+       </ng-container>
+
+       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="white"></tr>
+       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+     </table>
+    </div>
+  </div>
+</div>

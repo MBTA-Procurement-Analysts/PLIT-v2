@@ -4,15 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
-import { AdminComponent } from './admin/admin.component';
-import { AuthGuard } from './auth.guard';
+import { PoComponent } from './po/po.component';
+import { ReqComponent } from './req/req.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'user/:id', component: DashboardComponent, canActivate: [AuthGuard] }
+  { path: 'dashboard', component: DashboardComponent, children: [
+    { path: 'reqs', component: ReqComponent },
+    { path: 'po', component: PoComponent }
+  ] },
+  { path: 'login', component: LoginComponent }
 ];
 
 @NgModule({

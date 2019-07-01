@@ -1,18 +1,147 @@
-<!-- <div class="row">
-  <div class="col l2 sidebar">
+<div class="container">
+  <div class="req-container mat-elevation-z3">
+    <mat-chip-list>
+      <div class="mat-display-1">
+        Requisition List
+      </div>
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            All
+            <mat-chip *ngIf="allReqs != null" >{{allReqs.length}}</mat-chip>
+          </ng-template>
+          <div class="table-container">
+           <table mat-table [dataSource]="allReqs" class="mat-elevation">
 
-  </div>
-  <div class="col l10 offset-l2 z-depth-2">
-    <app-req></app-req>
-    <app-po></app-po>
-  </div>
-</div> -->
+              <ng-container matColumnDef="color">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let all"></td>
+              </ng-container>
 
-<mat-drawer-container class="example-container">
-  <mat-drawer mode="side" opened>
-    hello
-    </mat-drawer>
-    <mat-drawer-content>
-      <app-req></app-req>
-    </mat-drawer-content>
-  </mat-drawer-container>
+             <ng-container matColumnDef="flag">
+               <th mat-header-cell *matHeaderCellDef> FLAG </th>
+               <td mat-cell *matCellDef="let all">
+                 <div>
+                   <mat-checkbox></mat-checkbox>
+                </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Business Unit">
+               <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+               <td mat-cell *matCellDef="let all"> {{all.Business_Unit}} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Req ID">
+               <th mat-header-cell *matHeaderCellDef> Req No </th>
+               <td mat-cell *matCellDef="let all"> {{all.REQ_No}} </td>
+             </ng-container>
+
+             <!-- <ng-container matColumnDef="Vendor">
+               <th mat-header-cell *matHeaderCellDef> Vendor </th>
+               <td mat-cell *matCellDef="let all"> {{all.Req_Info.REQ_No}} </td>
+             </ng-container> -->
+
+             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+           </table>
+         </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            Action
+            <mat-chip class="action-chip" *ngIf="actionReqs != null" >{{actionReqs.length}}</mat-chip>
+          </ng-template>
+          <div class="table-container">
+           <table mat-table [dataSource]="actionReqs" class="mat-elevation">
+             <ng-container matColumnDef="color">
+               <th mat-header-cell *matHeaderCellDef></th>
+               <td mat-cell *matCellDef="let action" [style.background-color]="actionColor"></td>
+             </ng-container>
+
+             <ng-container matColumnDef="flag">
+               <th mat-header-cell *matHeaderCellDef> FLAG </th>
+               <td mat-cell *matCellDef="let action">
+                 <div>
+                   <mat-checkbox></mat-checkbox>
+                </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Business Unit">
+               <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+               <td mat-cell *matCellDef="let action"> {{action.Business_Unit}} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Req ID">
+               <th mat-header-cell *matHeaderCellDef> Req No </th>
+               <td mat-cell *matCellDef="let action"> {{action.REQ_No}} </td>
+             </ng-container>
+
+             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+           </table>
+         </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            Hold
+            <mat-chip class="hold-chip" *ngIf="holdReqs !== null" >{{holdReqs.length}}</mat-chip>
+          </ng-template>
+          <div class="table-container">
+           <table mat-table [dataSource]="holdReqs" class="mat-elevation">
+             <ng-container matColumnDef="color">
+               <th mat-header-cell *matHeaderCellDef></th>
+               <td mat-cell *matCellDef="let hold" [style.background-color]="holdColor"></td>
+             </ng-container>
+
+             <ng-container matColumnDef="Business Unit">
+               <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+               <td mat-cell *matCellDef="let hold"> {{hold.Business_Unit}} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Req ID">
+               <th mat-header-cell *matHeaderCellDef> Req ID </th>
+               <td mat-cell *matCellDef="let hold"> {{hold.Req_ID}} </td>
+             </ng-container>
+
+             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+           </table>
+          </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            Transmission
+            <mat-chip class="transmission-chip" *ngIf="transmissionReqs !== null">{{transmissionReqs.length}}</mat-chip>
+          </ng-template>
+          <div class="table-container">
+           <table mat-table [dataSource]="transmissionReqs" class="mat-elevation">
+             <ng-container matColumnDef="color">
+               <th mat-header-cell *matHeaderCellDef></th>
+               <td mat-cell *matCellDef="let transmissionColor" [style.background-color]="transmissionColor"></td>
+             </ng-container>
+
+             <ng-container matColumnDef="Business Unit">
+               <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+               <td mat-cell *matCellDef="let transmission"> {{transmission.Business_Unit}} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Req ID">
+               <th mat-header-cell *matHeaderCellDef> Req ID </th>
+               <td mat-cell *matCellDef="let transmission"> {{transmission.Req_ID}} </td>
+             </ng-container>
+
+             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+           </table>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-chip-list>
+  </div>
+</div>
+<router-outlet></router-outlet>
