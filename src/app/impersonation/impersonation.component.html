@@ -1,7 +1,7 @@
 <mat-form-field class="mat-select-content">
   <mat-label>{{currentUser.fullname}}</mat-label>
   <mat-select>
-    <mat-option [routerLink]="['dashboard']" *ngFor="let user of users" (click)="changeUser(user._id)">
+    <mat-option [routerLink]="['dashboard/reqs']" *ngFor="let user of users" (click)="changeUser(user._id)">
       {{user.fullname}}
     </mat-option>
   </mat-select>

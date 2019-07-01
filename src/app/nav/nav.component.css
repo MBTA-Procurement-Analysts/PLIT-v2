@@ -3,14 +3,6 @@
   margin-top: 8px;
 }
 
-::ng-deep .mat-toolbar span a:hover {
-  color: #4ca6ee;
-}
-
-::ng-deep .mat-toolbar span:hover {
-  color: #4ca6ee;
-}
-
 ::ng-deep .mat-toolbar {
   background-color: white;
   position: fixed;
@@ -20,16 +12,65 @@
   z-index: 998;
 }
 
+span:focus {
+    outline: none;
+    border: 0;
+ }
+
 .title {
   padding-right: 170px;
 }
 
 .links {
+  padding: 15px;
   font-size: 14px;
+  border-bottom: 3px solid transparent
+}
+
+.links:hover {
+  color: #4ca6ee;
 }
 
 .example-fill-remaining-space {
   /* This fills the remaining space, by using flexbox.
      Every toolbar row uses a flexbox row layout. */
   flex: 1 1 auto;
+}
+
+.active-link {
+  color: #4ca6ee;
+  border-bottom: 3px solid #4ca6ee;
+}
+
+.sidenav {
+  margin-top: 60px;
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #293142;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  font-family: Roboto,sans-serif;
+  margin: 0;
+  display: block;
+  color: #bfc1c8;
+  text-decoration: none;
+  padding: 8px 8px 8px 32px;
+  outline: 0;
+  font-size: 14px;
+  position: relative;
+}
+
+.sidenav a:hover {
+  background-color: #464f5f;
+}
+
+.active-link-sidenav {
+  background-color: #464f5f;
 }

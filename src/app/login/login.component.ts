@@ -71,9 +71,9 @@ export class LoginComponent implements OnInit {
       return;
     } else if(this.currentUser.role === "Admin") {
       this.authService.isAdmin();
-      this.router.navigateByUrl('/admin');
+      this.router.navigateByUrl('/dashboard/reqs');
     } else {
-      this.router.navigateByUrl('/dashboard');
+      this.router.navigateByUrl('/dashboard/reqs');
     }
   }
 

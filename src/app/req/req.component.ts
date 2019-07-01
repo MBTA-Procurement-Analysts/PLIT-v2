@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReqService } from '../services/req.service';
 import { Req } from '../models/req';
 import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-req',
@@ -12,7 +13,23 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./req.component.css']
 })
 export class ReqComponent implements OnInit {
-  displayedColumns: string[] = ['Business Unit', 'Req ID'];
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  public pageSize = 20;
+  public currentPage = 0;
+  public totalSize = 0;
+  public dataSource: any;
+
+  displayedColumns: string[] = [
+    'flag',
+    'Business Unit',
+    'Req No',
+    'Days Since Creation',
+    'Days Since Approval',
+    'Amount',
+    'Requested Vendor',
+    'Description',
+    'FMIS'
+  ];
   allReqs: Req[];
   actionReqs: Req[];
   holdReqs: Req[];
@@ -38,6 +55,10 @@ export class ReqComponent implements OnInit {
     this.getReqs(this.currentUser.username.toUpperCase());
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   getReqs(user: string) {
     this.reqService.getReqs(user)
     .subscribe(
@@ -47,32 +68,56 @@ export class ReqComponent implements OnInit {
         this.transmissionReqs = [];
         this.holdReqs = [];
         this.actionReqs = [];
+        this.dataSource = reqs;
+        this.dataSource.paginator = this.paginator;
+        this.totalSize = reqs.length;
+        this.iterator();
 
         for(var i = 0; i < this.reqsArrayLength; i++) {
           this.tempReq = {
             _id: this.allReqs[i]._id,
             REQ_No: this.allReqs[i].REQ_No,
-            Req_ID: this.allReqs[i].Req_ID,
+            Account: this.allReqs[i].Account,
+            Approved_By: this.allReqs[i].Approved_By,
+            Approved_On: this.allReqs[i].Approved_On,
             Business_Unit: this.allReqs[i].Business_Unit,
             Buyer: this.allReqs[i].Buyer,
-            Hold_From_Further_Processing: this.allReqs[i].Hold_From_Further_Processing,
-            Hold_Status: this.allReqs[i].Hold_Status,
-            Sourcing: this.allReqs[i].Sourcing,
-            Lines_Not_Sourced: this.allReqs[i].Lines_Not_Sourced,
-            Out_To_Bid: this.allReqs[i].Out_To_Bid,
-            Transmitted: this.allReqs[i].Transmitted,
-            Transmitted_Time: this.allReqs[i].Transmitted_Time
-          }
-
-          if(this.tempReq.Transmitted === 'Y') {
-            this.transmissionReqs.push(this.tempReq);
-          } else if(this.tempReq.Hold_From_Further_Processing === 'Y') {
-            this.holdReqs.push(this.tempReq);
-          } else {
-            this.actionReqs.push(this.tempReq);
+            Currency: this.allReqs[i].Currency,
+            Department: this.allReqs[i].Department,
+            Fund: this.allReqs[i].Fund,
+            Origin: this.allReqs[i].Origin,
+            REQ_Date: this.allReqs[i].REQ_Date,
+            Requester: this.allReqs[i].Requester,
+            Ship_To: this.allReqs[i].Ship_To,
+            Status: this.allReqs[i].Status,
+            lines: this.allReqs[i].lines,
+            User_Notes: this.allReqs[i].User_Notes,
+            flag: this.allReqs[i].flag
           }
         }
       }
     );
+  }
+
+  getDateDifference(date: Date) {
+    var oneDay = 1000 * 60 * 60 * 24;
+    var currentDate = new Date().getTime();
+    var reqDate = date.toString();
+    var reqDate1 = new Date(reqDate).getTime();
+    var difference = Math.round(((currentDate - reqDate1) / oneDay));
+    return difference;
+  }
+
+  public handlePage(e: any) {
+    this.currentPage = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.iterator();
+  }
+
+  private iterator() {
+    const end = (this.currentPage + 1) * this.pageSize;
+    const start = this.currentPage * this.pageSize;
+    const part = this.allReqs.slice(start, end);
+    this.dataSource = part;
   }
 }
