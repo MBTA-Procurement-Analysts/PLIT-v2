@@ -89,6 +89,7 @@ export class ReqComponent implements OnInit {
             REQ_Date: this.allReqs[i].REQ_Date,
             Requester: this.allReqs[i].Requester,
             Ship_To: this.allReqs[i].Ship_To,
+            Vendor: this.allReqs[i].Vendor,
             Status: this.allReqs[i].Status,
             lines: this.allReqs[i].lines,
             User_Notes: this.allReqs[i].User_Notes,
