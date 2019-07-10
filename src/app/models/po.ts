@@ -9,6 +9,7 @@ export class Po {
   Status: string;
   Vendor_Name: string;
   lines: Lines;
+  worklist: Worklist;
   }
 
 export class Lines {
@@ -28,4 +29,21 @@ export class Lines {
 export class Requisition {
   Req_ID: string;
   Line_No: number;
+}
+
+export class Worklist {
+  Appr_Inst: Number;
+  Work_List: string;
+  Approval_Number: string;
+  Appr_Stat: string;
+  Denial_Date_Time: Date;
+  User: string;
+  Unit: string;
+  PO_HDR_Status: string;
+  WF_APPR_Status: string;
+  Dispatch_DTTM: Date;
+  Threshold: string;
+  Buyer: string;
+  PO_Hdr_Created_Date: Date;
+  SUM_MERCHANDISE_AMT: number;
 }

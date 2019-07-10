@@ -13,7 +13,7 @@ import { UserService } from '../services/user.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isSubmitted  =  false;
-  isUser = true;
+  isUser = false;
   public currentUser: User;
   users: User[];
   userArrayLength = 0;
@@ -58,7 +58,6 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    this.isUser = true;
     this.getUser();
     this.isSubmitted = true;
 
@@ -82,13 +81,8 @@ export class LoginComponent implements OnInit {
 
     for(var i=0; i<this.userArrayLength; i++) {
       if(this.currentUser.username === this.users[i].username) {
-        this.currentUser._id = this.users[i]._id;
         this.currentUser.username = this.users[i].username;
-        this.currentUser.password = this.users[i].role;
         this.currentUser.role = this.users[i].role;
-        this.currentUser.fullname = this.users[i].fullname;
-        this.currentUser.email = this.users[i].email;
-        this.currentUser.loggedInBefore = this.users[i].loggedInBefore;
       }
     }
   }

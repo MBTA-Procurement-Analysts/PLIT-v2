@@ -40,6 +40,7 @@ export class AuthService {
   public login(userInfo: User): boolean {
     this.getUsers();
     let isUser = false;
+    console.log(userInfo);
     for(var i=0; i < this.userArrayLength;  i++) {
       if(this.users[i].username === userInfo.username && this.users[i].role === userInfo.password) {
         isUser = true;
@@ -63,6 +64,7 @@ export class AuthService {
     }
     this.setInitialUser(this.initialUser);
     this.changeUser(this.currentUser);
+    console.log(isUser);
     return isUser;
   }
 

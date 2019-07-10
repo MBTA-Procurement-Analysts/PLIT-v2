@@ -14,6 +14,7 @@ export class Req {
       Requester: string;
       Ship_To: Ship_To;
       Status: string;
+      Vendor: Vendor;
       lines: Lines
       User_Notes: User_Notes;
       flag: boolean;
@@ -32,6 +33,11 @@ export class Ship_To {
   State: string;
   Zip_Code: string;
   Country: string;
+}
+
+export class Vendor {
+  Name: string;
+  Number: number;
 }
 
 export class Lines {

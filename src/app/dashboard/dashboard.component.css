@@ -12,6 +12,7 @@
 
 .table-container {
   margin: 25px;
+  height: 500px;
 }
 
 mat-tab-group {
@@ -27,18 +28,37 @@ table {
   width: 100%;
 }
 
+.mat-chip {
+  font-size: 12px;
+}
+
 .action-chip {
   background-color: green;
 }
 
 .hold-chip {
-  background-color: yellow;
+  background-color: #F5C438;
 }
 
 .transmission-chip {
   background-color: red;
 }
 
-th:nth-child(1) {
-    width: 1%;
+.material-icons.md-12 {
+  font-size: 12px;
+}
+
+.material-icons.actionColor {
+  font-size: 12px;
+  color: green;
+}
+
+.material-icons.holdColor {
+  font-size: 12px;
+  color: #F5C438;
+}
+
+.material-icons.transmissionColor {
+  font-size: 12px;
+  color: red;
 }

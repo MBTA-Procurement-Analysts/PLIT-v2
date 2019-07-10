@@ -4,18 +4,34 @@
       <div class="mat-display-1">
         Requisition List
       </div>
-      <mat-tab-group>
+      <mat-tab-group (selectedTabChange)="changeDataSource($event)" [(selectedIndex)]="selectedIndex">
         <mat-tab>
           <ng-template mat-tab-label>
             All
-            <mat-chip *ngIf="allReqs != null" >{{allReqs.length}}</mat-chip>
+            <mat-chip *ngIf="allReqInfo != null" >{{allReqInfo.length}}</mat-chip>
           </ng-template>
-          <div class="table-container">
-           <table mat-table [dataSource]="allReqs" class="mat-elevation">
+          <div *ngIf="reqsLoaded" class="table-container">
+           <table mat-table [dataSource]="dataSource" class="mat-elevation">
 
               <ng-container matColumnDef="color">
                 <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let all"></td>
+                <td mat-cell *matCellDef="let all">
+                  <div *ngIf="all.Transmitted === 'Y'">
+                    <i class="material-icons transmissionColor">
+                      lens
+                    </i>
+                  </div>
+                  <div *ngIf="all.Hold_From_Further_Processing === 'Y'">
+                    <i class="material-icons holdColor">
+                      lens
+                    </i>
+                  </div>
+                  <div *ngIf="all.Transmitted === 'N' && all.Hold_From_Further_Processing ==='N'">
+                    <i class="material-icons actionColor">
+                      lens
+                    </i>
+                  </div>
+                </td>
               </ng-container>
 
              <ng-container matColumnDef="flag">
@@ -28,19 +44,96 @@
              </ng-container>
 
              <ng-container matColumnDef="Business Unit">
-               <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(allReqInfo)"> Business Unit </th>
                <td mat-cell *matCellDef="let all"> {{all.Business_Unit}} </td>
              </ng-container>
 
-             <ng-container matColumnDef="Req ID">
+             <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let all"> {{all.REQ_No}} </td>
              </ng-container>
 
-             <!-- <ng-container matColumnDef="Vendor">
-               <th mat-header-cell *matHeaderCellDef> Vendor </th>
-               <td mat-cell *matCellDef="let all"> {{all.Req_Info.REQ_No}} </td>
-             </ng-container> -->
+             <ng-container matColumnDef="Days Since Creation">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByCreation()">
+                 Days Since Creation
+                 <span *ngIf="sortByCreationFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByCreationFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let all">
+                 <div *ngIf="all.Req_Info.REQ_Date !== null">
+                   {{ getDateDifference(all.Req_Info.REQ_Date) }}
+                </div>
+              </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Approval">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByApproved()">
+                 Days Since Approval
+                 <span *ngIf="sortByApprovalFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByApprovalFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let all">
+                 <div *ngIf="all.Req_Info.Approved_On !== null">
+                   {{ getDateDifference(all.Req_Info.Approved_On) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Amount">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByAmount()">
+                 Amount
+                 <span *ngIf="sortAmountFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortAmountFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let all"> {{ addLines(all.Req_Info.lines) | currency }} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Requested Vendor">
+               <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
+               <td mat-cell *matCellDef="let all">
+                 <div *ngIf="all.Req_Info.Vendor !== null">
+                   {{all.Req_Info.Vendor.Name}}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Description">
+               <th mat-header-cell *matHeaderCellDef> Description </th>
+               <td mat-cell *matCellDef="let all">
+                 <div *ngIf="all.Req_Info.Department !== null">
+                   {{all.Req_Info.Department.Description}}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="FMIS">
+               <th mat-header-cell *matHeaderCellDef> FMIS </th>
+               <td mat-cell *matCellDef="let all"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{all.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
+             </ng-container>
 
              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -51,13 +144,17 @@
         <mat-tab>
           <ng-template mat-tab-label>
             Action
-            <mat-chip class="action-chip" *ngIf="actionReqs != null" >{{actionReqs.length}}</mat-chip>
+            <mat-chip class="action-chip" *ngIf="actionReqs != null" >{{actionReqs.length}} / {{allReqInfo.length}}</mat-chip>
           </ng-template>
-          <div class="table-container">
-           <table mat-table [dataSource]="actionReqs" class="mat-elevation">
+          <div *ngIf="reqsLoaded" class="table-container">
+           <table mat-table [dataSource]="dataSource" class="mat-elevation">
              <ng-container matColumnDef="color">
                <th mat-header-cell *matHeaderCellDef></th>
-               <td mat-cell *matCellDef="let action" [style.background-color]="actionColor"></td>
+               <td mat-cell *matCellDef="let action">
+                 <i class="material-icons actionColor">
+                   lens
+                 </i>
+               </td>
              </ng-container>
 
              <ng-container matColumnDef="flag">
@@ -70,13 +167,95 @@
              </ng-container>
 
              <ng-container matColumnDef="Business Unit">
-               <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(actionReqs)"> Business Unit </th>
                <td mat-cell *matCellDef="let action"> {{action.Business_Unit}} </td>
              </ng-container>
 
-             <ng-container matColumnDef="Req ID">
+             <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let action"> {{action.REQ_No}} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Creation">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByCreation()">
+                 Days Since Creation
+                 <span *ngIf="sortByCreationFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByCreationFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let action">
+                 <div *ngIf="action.Req_Info.REQ_Date !== null">
+                   {{ getDateDifference(action.Req_Info.REQ_Date) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Approval">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByApproved()">
+                 Days Since Approval
+                 <span *ngIf="sortByApprovalFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByApprovalFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let action">
+                 <div *ngIf="action.Req_Info.Approved_On !== null">
+                   {{ getDateDifference(action.Req_Info.Approved_On) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Amount">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByAmount()">
+                 Amount
+                 <span *ngIf="sortAmountFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortAmountFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let action"> {{ addLines(action.Req_Info.lines) | currency }} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Requested Vendor">
+               <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
+               <td mat-cell *matCellDef="let action">
+                 <div *ngIf="action.Req_Info.Vendor !== null">
+                   {{action.Req_Info.Vendor.Vendor_Name}}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Description">
+               <th mat-header-cell *matHeaderCellDef> Description </th>
+               <td mat-cell *matCellDef="let action">
+                 <div *ngIf="action.Req_Info.Department !== null">
+                   {{action.Req_Info.Department.Description}}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="FMIS">
+               <th mat-header-cell *matHeaderCellDef> FMIS </th>
+               <td mat-cell *matCellDef="let action"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{action.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
              </ng-container>
 
              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -88,23 +267,118 @@
         <mat-tab>
           <ng-template mat-tab-label>
             Hold
-            <mat-chip class="hold-chip" *ngIf="holdReqs !== null" >{{holdReqs.length}}</mat-chip>
+            <mat-chip class="hold-chip" *ngIf="holdReqs !== null" >{{holdReqs.length}} / {{allReqInfo.length}}</mat-chip>
           </ng-template>
-          <div class="table-container">
-           <table mat-table [dataSource]="holdReqs" class="mat-elevation">
+          <div *ngIf="reqsLoaded" class="table-container">
+           <table mat-table [dataSource]="dataSource" class="mat-elevation">
              <ng-container matColumnDef="color">
                <th mat-header-cell *matHeaderCellDef></th>
-               <td mat-cell *matCellDef="let hold" [style.background-color]="holdColor"></td>
+               <td mat-cell *matCellDef="let hold">
+                 <i class="material-icons holdColor">
+                   lens
+                 </i>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="flag">
+               <th mat-header-cell *matHeaderCellDef> FLAG </th>
+               <td mat-cell *matCellDef="let hold">
+                 <div>
+                   <mat-checkbox></mat-checkbox>
+                </div>
+               </td>
              </ng-container>
 
              <ng-container matColumnDef="Business Unit">
-               <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(holdReqs)"> Business Unit </th>
                <td mat-cell *matCellDef="let hold"> {{hold.Business_Unit}} </td>
              </ng-container>
 
-             <ng-container matColumnDef="Req ID">
-               <th mat-header-cell *matHeaderCellDef> Req ID </th>
-               <td mat-cell *matCellDef="let hold"> {{hold.Req_ID}} </td>
+             <ng-container matColumnDef="Req No">
+               <th mat-header-cell *matHeaderCellDef> Req No </th>
+               <td mat-cell *matCellDef="let hold"> {{hold.REQ_No}} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Creation">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByCreation()">
+                 Days Since Creation
+                 <span *ngIf="sortByCreationFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByCreationFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let hold">
+                 <div *ngIf="hold.Req_Info.REQ_Date !== null">
+                   {{ getDateDifference(hold.Req_Info.REQ_Date) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Approval">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByApproved()">
+                 Days Since Approval
+                 <span *ngIf="sortByApprovalFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByApprovalFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let hold">
+                 <div *ngIf="hold.Req_Info.Approved_On !== null">
+                   {{ getDateDifference(hold.Req_Info.Approved_On) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Amount">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByAmount()">
+                 Amount
+                 <span *ngIf="sortAmountFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortAmountFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let hold"> {{ addLines(hold.Req_Info.lines) | currency }} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Requested Vendor">
+               <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
+               <td mat-cell *matCellDef="let hold">
+                 <div *ngIf="hold.Req_Info.Vendor !== null">
+                   {{hold.Req_Info.Vendor.Vendor_Name}}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Description">
+               <th mat-header-cell *matHeaderCellDef> Description </th>
+               <td mat-cell *matCellDef="let hold">
+                 <div *ngIf="hold.Req_Info.Department !== null">
+                   {{hold.Req_Info.Department.Description}}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="FMIS">
+               <th mat-header-cell *matHeaderCellDef> FMIS </th>
+               <td mat-cell *matCellDef="let hold"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{hold.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
              </ng-container>
 
              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -116,23 +390,118 @@
         <mat-tab>
           <ng-template mat-tab-label>
             Transmission
-            <mat-chip class="transmission-chip" *ngIf="transmissionReqs !== null">{{transmissionReqs.length}}</mat-chip>
+            <mat-chip class="transmission-chip" *ngIf="transmissionReqs !== null">{{transmissionReqs.length}} / {{allReqInfo.length}}</mat-chip>
           </ng-template>
-          <div class="table-container">
-           <table mat-table [dataSource]="transmissionReqs" class="mat-elevation">
+          <div *ngIf="reqsLoaded" class="table-container">
+           <table mat-table [dataSource]="dataSource" class="mat-elevation">
              <ng-container matColumnDef="color">
                <th mat-header-cell *matHeaderCellDef></th>
-               <td mat-cell *matCellDef="let transmissionColor" [style.background-color]="transmissionColor"></td>
+               <td mat-cell *matCellDef="let transmissionColor">
+                 <i class="material-icons transmissionColor">
+                   lens
+                 </i>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="flag">
+               <th mat-header-cell *matHeaderCellDef> FLAG </th>
+               <td mat-cell *matCellDef="let transmission">
+                 <div>
+                   <mat-checkbox></mat-checkbox>
+                </div>
+               </td>
              </ng-container>
 
              <ng-container matColumnDef="Business Unit">
-               <th mat-header-cell *matHeaderCellDef> Business Unit </th>
+               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(transmissionReqs)"> Business Unit </th>
                <td mat-cell *matCellDef="let transmission"> {{transmission.Business_Unit}} </td>
              </ng-container>
 
-             <ng-container matColumnDef="Req ID">
-               <th mat-header-cell *matHeaderCellDef> Req ID </th>
-               <td mat-cell *matCellDef="let transmission"> {{transmission.Req_ID}} </td>
+             <ng-container matColumnDef="Req No">
+               <th mat-header-cell *matHeaderCellDef> Req No </th>
+               <td mat-cell *matCellDef="let transmission"> {{transmission.REQ_No}} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Creation">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByCreation()">
+                 Days Since Creation
+                 <span *ngIf="sortByCreationFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByCreationFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let transmission">
+                 <div *ngIf="transmission.Req_Info.REQ_Date !== null">
+                   {{ getDateDifference(transmission.Req_Info.REQ_Date) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Approval">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByApproved()">
+                 Days Since Approval
+                 <span *ngIf="sortByApprovalFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByApprovalFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let transmission">
+                 <div *ngIf="transmission.Req_Info.Approved_On !== null">
+                   {{ getDateDifference(transmission.Req_Info.Approved_On) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Amount">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByAmount()">
+                 Amount
+                 <span *ngIf="sortAmountFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortAmountFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let transmission"> {{ addLines(transmission.Req_Info.lines) | currency }} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Requested Vendor">
+               <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
+               <td mat-cell *matCellDef="let transmission">
+                 <div *ngIf="transmission.Req_Info.Vendor !== null">
+                   {{transmission.Req_Info.Vendor.Vendor_Name }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Description">
+               <th mat-header-cell *matHeaderCellDef> Description </th>
+               <td mat-cell *matCellDef="let transmission">
+                 <div *ngIf="transmission.Req_Info.Department !== null">
+                   {{transmission.Req_Info.Department.Description}}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="FMIS">
+               <th mat-header-cell *matHeaderCellDef> FMIS </th>
+               <td mat-cell *matCellDef="let transmission"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{transmission.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
              </ng-container>
 
              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -142,6 +511,10 @@
         </mat-tab>
       </mat-tab-group>
     </mat-chip-list>
+
+   <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 100]" [showFirstLastButtons]="true" [length]="totalSize"
+     [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+   </mat-paginator>
   </div>
 </div>
 <router-outlet></router-outlet>
