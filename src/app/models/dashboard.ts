@@ -33,7 +33,7 @@ export class Req {
       Vendor: Vendor;
       lines: Lines;
       User_Notes: User_Notes;
-      flag: boolean;
+      flag: Boolean;
   }
 
 export class Department {

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Po } from '../models/po';
 import { PoService } from '../services/po.service';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { User } from '../models/user';
+import { AuthService } from '../services/auth.service';
+import { MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-po',
@@ -10,7 +13,16 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./po.component.css']
 })
 export class PoComponent implements OnInit {
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  public pageSize = 5;
+  public currentPage = 0;
+  public totalSize = 0;
+  public dataSource: any;
+
+  tempPos: Po[];
   pos: Po[];
+  user: User;
+
   displayedColumns: string[] = [
     'Business Unit',
     'Po No',
@@ -20,7 +32,8 @@ export class PoComponent implements OnInit {
 
   constructor(
     private poService: PoService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -33,10 +46,21 @@ export class PoComponent implements OnInit {
   }
 
   getPos(): void {
+    this.authService.globalCurrentUser.subscribe(user => this.user = user);
     this.poService.getPos()
     .subscribe(
       pos => {
-        this.pos = pos;
+        this.pos = [];
+        this.tempPos = pos;
+        this.tempPos.map(po => {
+          if(po.Buyer === this.user.username.toUpperCase()) {
+            this.pos.push(po);
+          }
+        })
+        this.dataSource = this.pos;
+        this.dataSource.paginator = this.paginator;
+        this.totalSize = this.pos.length;
+        this.iterator();
         console.log(this.pos);
       }
     );
@@ -49,5 +73,18 @@ export class PoComponent implements OnInit {
     var reqDate1 = new Date(reqDate).getTime();
     var difference = Math.round(((currentDate - reqDate1) / oneDay));
     return difference;
+  }
+
+  public handlePage(e: any) {
+    this.currentPage = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.iterator();
+  }
+
+  private iterator() {
+    const end = (this.currentPage + 1) * this.pageSize;
+    const start = this.currentPage * this.pageSize;
+    const part = this.pos.slice(start, end);
+    this.dataSource = part;
   }
 }

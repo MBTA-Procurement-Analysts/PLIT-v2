@@ -15,6 +15,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 
 import { AuthService } from './services/auth.service'
 import { AuthGuard } from './auth.guard';
@@ -29,6 +33,10 @@ import { NavComponent } from './nav/nav.component';
 import { ReqComponent } from './req/req.component';
 import { ReqDetailsComponent } from './req-details/req-details.component';
 import { PoComponent } from './po/po.component';
+import { BidComponent } from './bid/bid.component';
+import { BidDetailsComponent } from './bid-details/bid-details.component';
+
+import { SearchPipe } from './pipes/search.pipe';
 
 @NgModule({
   declarations: [
@@ -39,7 +47,10 @@ import { PoComponent } from './po/po.component';
     NavComponent,
     ReqComponent,
     ReqDetailsComponent,
-    PoComponent
+    PoComponent,
+    BidComponent,
+    BidDetailsComponent,
+    SearchPipe
   ],
   imports: [
     BrowserModule,
@@ -60,7 +71,12 @@ import { PoComponent } from './po/po.component';
     MatTabsModule,
     MatChipsModule,
     MatCheckboxModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRippleModule
   ],
   exports: [
     MatPaginatorModule

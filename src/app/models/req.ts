@@ -15,7 +15,7 @@ export class Req {
       Ship_To: Ship_To;
       Status: string;
       Vendor: Vendor;
-      lines: Lines
+      lines: Lines;
       User_Notes: User_Notes;
       flag: boolean;
   }

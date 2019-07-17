@@ -8,11 +8,13 @@
   margin-right: 25px;
   margin-left: 25px;
   background-color: white;
+  width: calc(100vw - 275px);
 }
 
 .table-container {
   margin: 25px;
   height: 500px;
+  overflow: scroll;
 }
 
 mat-tab-group {
@@ -24,8 +26,15 @@ mat-chip {
     box-shadow: none !important;
 }
 
+.mat-display-1 {
+  margin-top: 5px;
+}
+
 table {
   width: 100%;
+}
+.mat-standard-chip {
+  min-height: 24px;
 }
 
 .mat-chip {
@@ -49,6 +58,7 @@ table {
 }
 
 .material-icons.actionColor {
+
   font-size: 12px;
   color: green;
 }
@@ -61,4 +71,8 @@ table {
 .material-icons.transmissionColor {
   font-size: 12px;
   color: red;
+}
+
+.mat-cell.mat-column-flag  {
+  padding-top: 5px !important;
 }

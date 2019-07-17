@@ -39,7 +39,7 @@ span:focus {
 
 .active-link {
   color: #4ca6ee;
-  border-bottom: 3px solid #4ca6ee;
+  border-bottom: 3px solid #4ca6ee !important;
 }
 
 .sidenav {
