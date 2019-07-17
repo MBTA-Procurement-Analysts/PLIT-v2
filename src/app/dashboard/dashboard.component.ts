@@ -44,7 +44,6 @@ export class DashboardComponent implements OnInit {
   reqsArrayLength: number;
   currentUser: User;
   reqsLoaded: Promise<boolean>;
-  isChecked: boolean;
   selectedIndex: number;
   sortAmountFlag: number = 0;
   filterBusinessUnitFlag: number = 0;
@@ -125,6 +124,7 @@ export class DashboardComponent implements OnInit {
           reqInfoObservable.subscribe(
             reqInfo => {
               this.allReqInfo[counter].Req_Info = reqInfo[0];
+              this.allReqInfo[counter].Req_Info.flag = reqInfo[0].flag;
               if (this.allReqInfo[counter].Transmitted === 'Y') {
                 this.transmissionReqs.push(this.allReqInfo[counter]);
               } else if (this.allReqInfo[counter].Hold_From_Further_Processing === 'Y') {
@@ -162,6 +162,7 @@ export class DashboardComponent implements OnInit {
   changeDataSource(dataSource: MatTabChangeEvent) {
     if (dataSource.index === 0) {
       this.currentPage = 0;
+      this.pageSize = 5;
       this.dataSource = this.allReqInfo;
       this.tempDataSource = this.allReqInfo;
       this.totalSize = this.allReqInfo.length;
@@ -169,6 +170,7 @@ export class DashboardComponent implements OnInit {
       this.iterator();
     } else if (dataSource.index === 1) {
       this.currentPage = 0;
+      this.pageSize = 5;
       this.dataSource = this.actionReqs;
       this.tempDataSource = this.actionReqs;
       this.totalSize = this.actionReqs.length;
@@ -176,6 +178,7 @@ export class DashboardComponent implements OnInit {
       this.iterator();
     } else if (dataSource.index === 2) {
       this.currentPage = 0;
+      this.pageSize = 5;
       this.dataSource = this.holdReqs;
       this.tempDataSource = this.holdReqs;
       this.totalSize = this.holdReqs.length;
@@ -183,6 +186,7 @@ export class DashboardComponent implements OnInit {
       this.iterator();
     } else if (dataSource.index === 3) {
       this.currentPage = 0;
+      this.pageSize = 5;
       this.dataSource = this.transmissionReqs;
       this.tempDataSource = this.transmissionReqs;
       this.totalSize = this.transmissionReqs.length;
@@ -228,6 +232,7 @@ export class DashboardComponent implements OnInit {
       )
       // console.log(list.length);
       this.totalSize = this.tempDataSource.length;
+      this.currentPage = 0;
       this.iterator();
       this.filterBusinessUnitFlag = 1
       return list;
@@ -236,12 +241,14 @@ export class DashboardComponent implements OnInit {
         req => req.Business_Unit === 'MBTAF'
       )
       this.totalSize = this.tempDataSource.length;
+      this.currentPage = 0;
       this.iterator();
       this.filterBusinessUnitFlag = 2;
       return list;
     } else {
       this.tempDataSource = list;
       this.totalSize = this.tempDataSource.length;
+      this.currentPage = 0;
       this.iterator();
       this.filterBusinessUnitFlag = 0;
       return list;
@@ -274,5 +281,11 @@ export class DashboardComponent implements OnInit {
       this.sortByApprovalFlag = 0;
       return this.tempDataSource;
     }
+  }
+
+  searchPageSize() {
+    this.pageSize = this.totalSize;
+    this.currentPage = 0;
+    this.iterator();
   }
 }

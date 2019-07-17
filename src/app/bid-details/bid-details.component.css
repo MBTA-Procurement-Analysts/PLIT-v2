@@ -2,7 +2,8 @@
   margin-left: 200px;
 }
 
-.req-container {
+.bid-details-container {
+  position: fixed;
   padding: 20px;
   margin-top: 100px;
   margin-right: 25px;
@@ -20,6 +21,14 @@ mat-divider {
   margin-bottom: 25px;
 }
 
-.badge {
+.mat-flat-button {
   margin-right: 5px;
+}
+
+mat-form-field {
+  margin-right: 10px;
+}
+
+mat-expansion-panel {
+  padding-top: 10px;
 }

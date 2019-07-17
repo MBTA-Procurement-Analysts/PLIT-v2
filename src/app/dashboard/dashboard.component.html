@@ -1,9 +1,14 @@
 <div class="container">
   <div class="req-container mat-elevation-z3">
+    <div class="mat-display-1 float-left">
+      Requisition List
+  </div>
+  <div class="float-right">
+    <mat-form-field>
+      <input matInput [(ngModel)]="searchText" placeholder="Search By REQ #" (click)="searchPageSize()">
+    </mat-form-field>
+  </div>
     <mat-chip-list>
-      <div class="mat-display-1">
-        Requisition List
-      </div>
       <mat-tab-group (selectedTabChange)="changeDataSource($event)" [(selectedIndex)]="selectedIndex">
         <mat-tab>
           <ng-template mat-tab-label>
@@ -11,7 +16,7 @@
             <mat-chip *ngIf="allReqInfo != null" >{{allReqInfo.length}}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
-           <table mat-table [dataSource]="dataSource" class="mat-elevation">
+           <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
 
               <ng-container matColumnDef="color">
                 <th mat-header-cell *matHeaderCellDef></th>
@@ -38,6 +43,7 @@
                <th mat-header-cell *matHeaderCellDef> FLAG </th>
                <td mat-cell *matCellDef="let all">
                  <div>
+                   <!-- ADD REQ FLAG ISN'T WORKING BECAUSE USERS DO NOT HAVE FLAG ATTRIBUTE -->
                    <mat-checkbox></mat-checkbox>
                 </div>
                </td>
@@ -50,7 +56,11 @@
 
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
-               <td mat-cell *matCellDef="let all"> {{all.REQ_No}} </td>
+               <td mat-cell *matCellDef="let all">
+                 <a routerLink="{{all.REQ_No}}">
+                   {{all.REQ_No}}
+                 </a>
+               </td>
              </ng-container>
 
              <ng-container matColumnDef="Days Since Creation">
@@ -147,7 +157,7 @@
             <mat-chip class="action-chip" *ngIf="actionReqs != null" >{{actionReqs.length}} / {{allReqInfo.length}}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
-           <table mat-table [dataSource]="dataSource" class="mat-elevation">
+           <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
              <ng-container matColumnDef="color">
                <th mat-header-cell *matHeaderCellDef></th>
                <td mat-cell *matCellDef="let action">
@@ -270,7 +280,7 @@
             <mat-chip class="hold-chip" *ngIf="holdReqs !== null" >{{holdReqs.length}} / {{allReqInfo.length}}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
-           <table mat-table [dataSource]="dataSource" class="mat-elevation">
+           <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
              <ng-container matColumnDef="color">
                <th mat-header-cell *matHeaderCellDef></th>
                <td mat-cell *matCellDef="let hold">
@@ -393,7 +403,7 @@
             <mat-chip class="transmission-chip" *ngIf="transmissionReqs !== null">{{transmissionReqs.length}} / {{allReqInfo.length}}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
-           <table mat-table [dataSource]="dataSource" class="mat-elevation">
+           <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
              <ng-container matColumnDef="color">
                <th mat-header-cell *matHeaderCellDef></th>
                <td mat-cell *matCellDef="let transmissionColor">

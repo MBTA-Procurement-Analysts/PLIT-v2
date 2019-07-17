@@ -1,0 +1,103 @@
+<div class="container">
+<div class="bid-container">
+  <div class="mat-display-1">
+    Bids
+  </div>
+  <mat-accordion>
+    <mat-expansion-panel
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Add Bid
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ panelOpenState ? '' : 'click here to add bid information' }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="bidForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+          <input matInput placeholder="Buyer ID" class="validate" formControlName="Buyer">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Requisition Number" class="validate" formControlName="Req_ID">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Description" class="validate" formControlName="Proj_Name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select placeholder="Funding Source Code" class="validate" formControlName="Fund_Code" [value]="fundCode.value">
+            <mat-option value="MBTAN">MBTAN</mat-option>
+            <mat-option value="MBTAC">MBTAC</mat-option>
+            <mat-option value="MBTAF">MBTAF</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field>
+          <mat-select placeholder="Bid Type" class="validate" formControlName="Bid_Type" [value]="bidType.value">
+            <mat-option value="IFB">IFB (Invitation for bid)</mat-option>
+            <mat-option value="RFP">RFP (Request for Proposals)</mat-option>
+            <mat-option value="LOI">LOI (Letter of Interest)</mat-option>
+            <mat-option value="RFI">RFI (Request for Information)</mat-option>
+            <mat-option value="RFR">RFR (Request for Response)</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker3" placeholder="Bid Opening Date" [value]="date.value" formControlName="Timeframe">
+          <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+          <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Comments" class="validate" formControlName="comments">
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Add Bid</button>
+      </form>
+    </mat-expansion-panel>
+    </mat-accordion>
+
+
+    <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation">
+
+      <ng-container matColumnDef="Bid Number">
+        <th mat-header-cell *matHeaderCellDef> Bid Number </th>
+        <td mat-cell *matCellDef="let bid">
+          <a routerLink="{{bid._id}}">
+            {{bid.Bid_ID}}
+          </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Bid Description">
+        <th mat-header-cell *matHeaderCellDef> Bid Description </th>
+        <td mat-cell *matCellDef="let bid"> {{bid.Proj_Name | slice:0:50 }}... </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Request Date">
+        <th mat-header-cell *matHeaderCellDef> Request Date </th>
+        <td mat-cell *matCellDef="let bid"> {{bid.Requested_Dttm | date }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Bid Open Date">
+        <th mat-header-cell *matHeaderCellDef> Bid Open Date </th>
+        <td mat-cell *matCellDef="let bid"> {{bid.Timeframe | date }} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 100]" [showFirstLastButtons]="true" [length]="bids.length"
+  [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+</mat-paginator>
+</div>
+</div>

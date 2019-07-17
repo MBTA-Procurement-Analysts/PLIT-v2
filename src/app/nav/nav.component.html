@@ -1,16 +1,25 @@
 <mat-toolbar *ngIf="router.url !== '/login'" class="mat-elevation-z3">
   <span class="title">PLIT</span>
   <span class="links" [routerLink]="['dashboard']" routerLinkActive="active-link">DASHBOARD</span>
+  <span class="links" [routerLink]="['self-service']" routerLinkActive="active-link">SELF-SERVICE</span>
   <span class="example-fill-remaining-space"></span>
   <span *ngIf="initialUser.role === 'Admin'"><app-impersonation></app-impersonation></span>
   <span><a class="material-icons logout black-text" [routerLink]="['login']">exit_to_app</a></span>
 </mat-toolbar>
 
 <div class="sidenav mat-elevation-z3">
-  <a [routerLink]="['dashboard/reqs']" routerLinkActive="active-link-sidenav">
-    Req List
-  </a>
-  <a [routerLink]="['dashboard/po']" routerLinkActive="active-link-sidenav">
-    Pending POs
-  </a>
+  <div *ngIf="router.isActive('dashboard')">
+    <a [routerLink]="['dashboard/reqs']" routerLinkActive="active-link-sidenav">
+      Req List
+    </a>
+    <a [routerLink]="['dashboard/po']" routerLinkActive="active-link-sidenav">
+      Pending POs
+    </a>
+  </div>
+
+  <div *ngIf="router.isActive('self-service')">
+    <a [routerLink]="['self-service/bids']" routerLinkActive="active-link-sidenav">
+      Bid Log
+    </a>
+  </div>
 </div>

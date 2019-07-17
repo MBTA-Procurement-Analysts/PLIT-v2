@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="bid-details-container">
+    <div class="mat-headline">
+      {{ bid.Bid_ID }}
+      <button mat-raised-button color="primary" class="float-right" (click)="goBack()">Back To Bid List</button>
+    </div>
+    <button mat-flat-button color="accent" (click)="togglePanel()">Edit Bid</button>
+    <button mat-flat-button color="warn" (click)="deleteBid()">Delete Bid</button>
+
+    <mat-divider></mat-divider>
+
+    <mat-expansion-panel [expanded]="panelOpenState">
+    <p>edit placeholder</p>
+    </mat-expansion-panel>
+
+    <mat-divider *ngIf="panelOpenState"></mat-divider>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col"> Description </th>
+          <th scope="col">Buyer: </th>
+          <th scope="col">Requisition ID: </th>
+          <th scope="col">Comments: </th>
+          <th scope="col">Bid Opening Date: </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> {{ bid.Proj_Name }} </td>
+          <td> {{ bid.Buyer.fullname }} </td>
+          <td> {{ bid.Req_ID }} </td>
+          <td> {{ bid.comments }} </td>
+          <td> {{ bid.Requested_Dttm | date }} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
