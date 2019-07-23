@@ -4,6 +4,8 @@ import { Location } from '@angular/common';
 import { BidService } from '../services/bid.service';
 import { Bid, Buyer } from '../models/bid';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-bid-details',
@@ -16,32 +18,51 @@ export class BidDetailsComponent implements OnInit {
   buyer: Buyer;
   bidForm: FormGroup;
   date = new FormControl(new Date());
-  fundCode = new FormControl(new String(), Validators.required);
   bidType = new FormControl(new String(), Validators.required);
-  requestedDttm = new Date().getTime();
+  dbeOwner = new FormControl(new String());
+  bidDeadline = new FormControl(new Date());
+  preBidDttm = new FormControl(new Date());
+  materialType = new FormControl(new String());
   panelOpenState: boolean = false;
+  currentUser: User;
+  initialUser: User;
 
   constructor(
     private route: ActivatedRoute,
     private location: Location,
     private bidService: BidService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
+    this.currentUser = this.authService.currentUser;
+    this.initialUser = this.authService.initialUser;
     this.getBid();
-
     this.bidForm  =  this.formBuilder.group({
-        Buyer: ['', Validators.required],
-        Req_ID: ['', Validators.required],
-        Proj_Name: ['', Validators.required],
-        Fund_Code: this.fundCode,
         Bid_Type: this.bidType,
-        Timeframe: this.date,
-        comments: ['', Validators.required],
-        Requested_Dttm: this.requestedDttm
+        Bid_ID: [''],
+        Proj_Name: [''],
+        PreBidDttm: this.preBidDttm,
+        Bid_Deadline: this.bidDeadline,
+        Pre_Bid_Location: [''],
+        Dbe_Percentage: ['', Validators.max(100)],
+        Dbe_Owner: this.dbeOwner,
+        Material_Type: this.materialType
     });
   }
+
+//   var bid = {
+//     bidType: model.bidType,
+//     bidNumber: model.bidNumber,
+//     bidDesc: model.bidDesc,
+//     bidDeadline: model.bidDeadline,
+//     preBidDate: model.preBidDate,
+//     preBidLocation: model.preBidLocation,
+//     dbeOwner: model.dbeOwner,
+//     dbePercent: model.dbePercent,
+//     materialType: model.materialType
+// };
 
   getBid() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -67,5 +88,18 @@ export class BidDetailsComponent implements OnInit {
 
   togglePanel() {
     this.panelOpenState = !this.panelOpenState
+  }
+
+  onSubmit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.editBid = new Bid();
+    this.editBid.Bid_Type = this.bidForm.controls.Bid_Type.value
+    this.editBid.Bid_ID = this.bidForm.controls.Bid_ID.value
+    this.editBid.Proj_Name = this.bidForm.controls.Proj_Name.value
+
+    this.bidService.updateBid(id, this.editBid).subscribe(
+      bid => console.log(bid)
+    );
+    this.goBack();
   }
 }

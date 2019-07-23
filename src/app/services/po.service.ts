@@ -8,6 +8,7 @@ import { Po } from '../models/po';
 })
 export class PoService {
   private posUrl = 'http://localhost:3000/api/POPA';
+  private poUrl = 'http://localhost:3000/api/po/'
 
   constructor(
     private http: HttpClient
@@ -15,5 +16,9 @@ export class PoService {
 
   getPos(): Observable<Po[]> {
     return this.http.get<Po[]>(this.posUrl);
+  }
+
+  getPo(id: string): Observable<Po> {
+    return this.http.get<Po>(this.poUrl + id);
   }
 }

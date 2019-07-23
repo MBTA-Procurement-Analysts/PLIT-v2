@@ -13,7 +13,11 @@
 
        <ng-container matColumnDef="Po No">
          <th mat-header-cell *matHeaderCellDef>PO Number</th>
-         <td mat-cell *matCellDef="let po"> {{po.PO_No}} </td>
+         <td mat-cell *matCellDef="let po">
+           <a routerLink="{{po.PO_No}}">
+             {{po.PO_No}}
+           </a>
+         </td>
        </ng-container>
 
 

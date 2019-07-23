@@ -31,7 +31,12 @@
                       lens
                     </i>
                   </div>
-                  <div *ngIf="all.Transmitted === 'N' && all.Hold_From_Further_Processing ==='N'">
+                  <div *ngIf="all.Out_To_Bid === 'Y'" >
+                    <i class="material-icons outColor">
+                      lens
+                    </i>
+                  </div>
+                  <div *ngIf="all.Transmitted === 'N' && all.Hold_From_Further_Processing ==='N' && all.Out_To_Bid === 'N'">
                     <i class="material-icons actionColor">
                       lens
                     </i>
@@ -44,13 +49,29 @@
                <td mat-cell *matCellDef="let all">
                  <div>
                    <!-- ADD REQ FLAG ISN'T WORKING BECAUSE USERS DO NOT HAVE FLAG ATTRIBUTE -->
-                   <mat-checkbox></mat-checkbox>
+                   <mat-checkbox [checked]="all.Req_Info.flag" (click)="changeFlag(all)"></mat-checkbox>
                 </div>
                </td>
              </ng-container>
 
              <ng-container matColumnDef="Business Unit">
-               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(allReqInfo)"> Business Unit </th>
+               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(allReqInfo)">
+                <div *ngIf="filterBusinessUnitFlag === 0">
+                  Business Unit
+                </div>
+                <div *ngIf="filterBusinessUnitFlag === 1">
+                  Business Unit (C)
+                </div>
+                <div *ngIf="filterBusinessUnitFlag === 2">
+                  Business Unit (F)
+                </div>
+                <div *ngIf="filterBusinessUnitFlag === 3">
+                  Business Unit (N)
+                </div>
+                <div *ngIf="filterBusinessUnitFlag === 4">
+                  Business Unit (I)
+                </div>
+               </th>
                <td mat-cell *matCellDef="let all"> {{all.Business_Unit}} </td>
              </ng-container>
 
@@ -140,6 +161,18 @@
                </td>
              </ng-container>
 
+              <ng-container matColumnDef="Comments">
+                <th mat-header-cell *matHeaderCellDef> Comments </th>
+                <td mat-cell *matCellDef="let all">
+                  <div *ngIf="all.Req_Info.User_Notes?.Note_Info">
+                    {{ all.Req_Info.User_Notes[all.Req_Info.User_Notes.length - 1].Note_Info }} <br>
+                    <div *ngIf="all.Req_Info.User_Notes.length > 1">
+                      {{ all.Req_Info.User_Notes[all.Req_Info.User_Notes.length - 2].Note_Info }}
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+
              <ng-container matColumnDef="FMIS">
                <th mat-header-cell *matHeaderCellDef> FMIS </th>
                <td mat-cell *matCellDef="let all"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{all.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
@@ -183,7 +216,11 @@
 
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
-               <td mat-cell *matCellDef="let action"> {{action.REQ_No}} </td>
+               <td mat-cell *matCellDef="let action">
+                 <a routerLink="{{action.REQ_No}}">
+                   {{action.REQ_No}}
+                 </a>
+               </td>
              </ng-container>
 
              <ng-container matColumnDef="Days Since Creation">
@@ -263,6 +300,18 @@
                </td>
              </ng-container>
 
+             <ng-container matColumnDef="Comments">
+               <th mat-header-cell *matHeaderCellDef> Comments </th>
+               <td mat-cell *matCellDef="let action">
+                 <div *ngIf="action.Req_Info.User_Notes?.Note_Info">
+                   {{ action.Req_Info.User_Notes[action.Req_Info.User_Notes.length - 1].Note_Info }}
+                   <div *ngIf="action.Req_Info.User_Notes.length > 1">
+                     {{ action.Req_Info.User_Notes[action.Req_Info.User_Notes.length - 2].Note_Info }}
+                   </div>
+                 </div>
+               </td>
+             </ng-container>
+
              <ng-container matColumnDef="FMIS">
                <th mat-header-cell *matHeaderCellDef> FMIS </th>
                <td mat-cell *matCellDef="let action"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{action.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
@@ -306,7 +355,11 @@
 
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
-               <td mat-cell *matCellDef="let hold"> {{hold.REQ_No}} </td>
+               <td mat-cell *matCellDef="let hold">
+                 <a routerLink="{{hold.REQ_No}}">
+                   {{hold.REQ_No}}
+                 </a>
+               </td>
              </ng-container>
 
              <ng-container matColumnDef="Days Since Creation">
@@ -386,6 +439,18 @@
                </td>
              </ng-container>
 
+             <ng-container matColumnDef="Comments">
+               <th mat-header-cell *matHeaderCellDef> Comments </th>
+               <td mat-cell *matCellDef="let hold">
+                 <div *ngIf="hold.Req_Info.User_Notes?.Note_Info">
+                   {{ hold.Req_Info.User_Notes[hold.Req_Info.User_Notes.length - 1].Note_Info }}
+                   <div *ngIf="hold.Req_Info.User_Notes.length > 1">
+                     {{ hold.Req_Info.User_Notes[hold.Req_Info.User_Notes.length - 2].Note_Info }}
+                   </div>
+                 </div>
+               </td>
+             </ng-container>
+
              <ng-container matColumnDef="FMIS">
                <th mat-header-cell *matHeaderCellDef> FMIS </th>
                <td mat-cell *matCellDef="let hold"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{hold.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
@@ -429,7 +494,11 @@
 
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
-               <td mat-cell *matCellDef="let transmission"> {{transmission.REQ_No}} </td>
+               <td mat-cell *matCellDef="let transmission">
+                 <a routerLink="{{transmission.REQ_No}}">
+                   {{transmission.REQ_No}}
+                 </a>
+               </td>
              </ng-container>
 
              <ng-container matColumnDef="Days Since Creation">
@@ -509,9 +578,160 @@
                </td>
              </ng-container>
 
+             <ng-container matColumnDef="Comments">
+               <th mat-header-cell *matHeaderCellDef> Comments </th>
+               <td mat-cell *matCellDef="let transmission">
+                 <div *ngIf="transmission.Req_Info.User_Notes?.Note_Info">
+                   {{ transmission.Req_Info.User_Notes[transmission.Req_Info.User_Notes.length - 1].Note_Info }}
+                   <div *ngIf="transmission.Req_Info.User_Notes.length > 1">
+                     {{ transmission.Req_Info.User_Notes[transmission.Req_Info.User_Notes.length - 2].Note_Info }}
+                   </div>
+                 </div>
+               </td>
+             </ng-container>
+
              <ng-container matColumnDef="FMIS">
                <th mat-header-cell *matHeaderCellDef> FMIS </th>
                <td mat-cell *matCellDef="let transmission"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{transmission.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
+             </ng-container>
+
+             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+           </table>
+          </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            Out To Bid
+            <mat-chip class="out-chip" *ngIf="outToBidReqs !== null">{{outToBidReqs.length}} / {{allReqInfo.length}}</mat-chip>
+          </ng-template>
+          <div *ngIf="reqsLoaded" class="table-container">
+           <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
+             <ng-container matColumnDef="color">
+               <th mat-header-cell *matHeaderCellDef></th>
+               <td mat-cell *matCellDef="let outColor">
+                 <i class="material-icons outColor">
+                   lens
+                 </i>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="flag">
+               <th mat-header-cell *matHeaderCellDef> FLAG </th>
+               <td mat-cell *matCellDef="let out">
+                 <div>
+                   <mat-checkbox></mat-checkbox>
+                </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Business Unit">
+               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(outToBidReqs)"> Business Unit </th>
+               <td mat-cell *matCellDef="let out"> {{out.Business_Unit}} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Req No">
+               <th mat-header-cell *matHeaderCellDef> Req No </th>
+               <td mat-cell *matCellDef="let out">
+                 <a routerLink="{{out.REQ_No}}">
+                   {{out.REQ_No}}
+                 </a>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Creation">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByCreation()">
+                 Days Since Creation
+                 <span *ngIf="sortByCreationFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByCreationFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let out">
+                 <div *ngIf="out.Req_Info.REQ_Date !== null">
+                   {{ getDateDifference(out.Req_Info.REQ_Date) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Days Since Approval">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByApproved()">
+                 Days Since Approval
+                 <span *ngIf="sortByApprovalFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortByApprovalFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let out">
+                 <div *ngIf="out.Req_Info.Approved_On !== null">
+                   {{ getDateDifference(out.Req_Info.Approved_On) }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Amount">
+               <th mat-header-cell *matHeaderCellDef (click)="sortByAmount()">
+                 Amount
+                 <span *ngIf="sortAmountFlag === 0">
+                   <i class="material-icons md-12">
+                     arrow_downward
+                   </i>
+                 </span>
+                 <span *ngIf="sortAmountFlag === 1">
+                   <i class="material-icons md-12">
+                     arrow_upward
+                   </i>
+                 </span>
+               </th>
+               <td mat-cell *matCellDef="let out"> {{ addLines(out.Req_Info.lines) | currency }} </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Requested Vendor">
+               <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
+               <td mat-cell *matCellDef="let out">
+                 <div *ngIf="out.Req_Info.Vendor !== null">
+                   {{out.Req_Info.Vendor.Vendor_Name }}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Description">
+               <th mat-header-cell *matHeaderCellDef> Description </th>
+               <td mat-cell *matCellDef="let out">
+                 <div *ngIf="out.Req_Info.Department !== null">
+                   {{out.Req_Info.Department.Description}}
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="Comments">
+               <th mat-header-cell *matHeaderCellDef> Comments </th>
+               <td mat-cell *matCellDef="let out">
+                 <div *ngIf="out.Req_Info.User_Notes?.Note_Info">
+                   {{ out.Req_Info.User_Notes[out.Req_Info.User_Notes.length - 1].Note_Info }}
+                   <div *ngIf="out.Req_Info.User_Notes.length > 1">
+                     {{ out.Req_Info.User_Notes[out.Req_Info.User_Notes.length - 2].Note_Info }}
+                   </div>
+                 </div>
+               </td>
+             </ng-container>
+
+             <ng-container matColumnDef="FMIS">
+               <th mat-header-cell *matHeaderCellDef> FMIS </th>
+               <td mat-cell *matCellDef="let out"><a href="https://financials.mbta.com/psp/MTFP89_2/EMPLOYEE/ERP/c/REQUISITION_ITEMS.REQUISITIONS.GBL?Action=U&page=REQ_FORM&BUSINESS_UNIT=MBTAI&REQ_ID={{out.REQ_No}}" target="blank"><i class="material-icons"> link </i></a></td>
              </ng-container>
 
              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

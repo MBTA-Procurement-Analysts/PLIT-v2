@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="req?.REQ_No" >
   <div class="req-container">
     <div class="mat-headline">
       Requisition #{{req.REQ_No}} Details
@@ -46,6 +46,7 @@
     </table>
 
     <mat-divider></mat-divider>
+
     <div class="mat-headline">
       Lines
     </div>
@@ -66,7 +67,7 @@
         </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let line of req.lines">
+          <tr *ngFor="let line of req?.lines">
             <td> {{ line.Line_No }} - {{ line.Schedule_No }} </td>
             <td> {{ line.Item }}  </td>
             <td> Description </td>
@@ -85,26 +86,41 @@
     </table>
 
     <mat-divider></mat-divider>
+
     <div class="mat-headline">
       Notes
     </div>
     <mat-divider></mat-divider>
 
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">User</th>
-          <th scope="col">Date</th>
-          <th scope="col">Note</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="1"> NOTE PLACEHOLDER </td>
-          <td colspan="1"> NOTE PLACEHOLDER </td>
-          <td colspan="4"> NOTE PLACEHOLDER </td>
-        </tr>
-      </tbody>
-    </table>
+    <div *ngIf="req?.User_Notes">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Date</th>
+            <th scope="col">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let note of req?.User_Notes">
+            <td colspan="1"> {{ note?.User}} </td>
+            <td colspan="1"> {{ note?.Date | date:'short' }} </td>
+            <td colspan="4"> {{ note?.Note_Info }} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput placeholder="comment" class="validate" formControlName="Note_Info">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" class="float-right">Add Note</button>
+    </form>
+    <div *ngIf="commentForm.controls['Note_Info'].hasError('maxlength')">
+      25 CHARACTER LIMIT
+    </div>
   </div>
 </div>

@@ -10,6 +10,7 @@ export class BidService {
   private bidsUrl = 'http://localhost:3000/api/bids';
   private addBidUrl = 'http://localhost:3000/api/add-bid';
   private getBidUrl = 'http://localhost:3000/api/bid/';
+  private updateBidUrl = 'http://localhost:3000/api/update-bid/'
   private deleteBidUrl = 'http://localhost:3000/api/remove-bid/';
 
   constructor(
@@ -25,6 +26,14 @@ export class BidService {
 
   getBid(id: String): Observable<Bid> {
     return this.http.get<Bid>(this.getBidUrl + id);
+  }
+
+  updateBid(id: String, bid: Bid): Observable<Bid> {
+    return this.http.put<Bid>(this.updateBidUrl + id, {
+      Bid_Type: bid.Bid_Type,
+      Bid_ID: bid.Bid_ID,
+      Proj_Name: bid.Proj_Name
+    })
   }
 
   deleteBid(id: String): Observable<{}> {

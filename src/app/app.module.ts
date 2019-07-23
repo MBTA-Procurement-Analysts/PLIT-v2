@@ -37,6 +37,7 @@ import { BidComponent } from './bid/bid.component';
 import { BidDetailsComponent } from './bid-details/bid-details.component';
 
 import { SearchPipe } from './pipes/search.pipe';
+import { PoDetailsComponent } from './po-details/po-details.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { SearchPipe } from './pipes/search.pipe';
     PoComponent,
     BidComponent,
     BidDetailsComponent,
-    SearchPipe
+    SearchPipe,
+    PoDetailsComponent
   ],
   imports: [
     BrowserModule,

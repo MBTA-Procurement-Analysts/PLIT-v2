@@ -4,13 +4,76 @@
       {{ bid.Bid_ID }}
       <button mat-raised-button color="primary" class="float-right" (click)="goBack()">Back To Bid List</button>
     </div>
-    <button mat-flat-button color="accent" (click)="togglePanel()">Edit Bid</button>
-    <button mat-flat-button color="warn" (click)="deleteBid()">Delete Bid</button>
+    <div *ngIf="this.initialUser.role === 'Admin'">
+      <button mat-flat-button color="accent" (click)="togglePanel()">Edit Bid</button>
+      <button mat-flat-button color="warn" (click)="deleteBid()">Delete Bid</button>
+    </div>
 
     <mat-divider></mat-divider>
 
     <mat-expansion-panel [expanded]="panelOpenState">
-    <p>edit placeholder</p>
+      <form [formGroup]="bidForm" (ngSubmit)="onSubmit()" *ngIf="this.currentUser.role">
+        <mat-form-field>
+          <mat-select placeholder="Bid Type" class="validate" formControlName="Bid_Type" [value]="bidType.value">
+            <mat-option value="IFB">IFB (Invitation for bid)</mat-option>
+            <mat-option value="RFP">RFP (Request for Proposals)</mat-option>
+            <mat-option value="LOI">LOI (Letter of Interest)</mat-option>
+            <mat-option value="RFI">RFI (Request for Information)</mat-option>
+            <mat-option value="RFR">RFR (Request for Response)</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Bid Number" class="validate" formControlName="Bid_ID">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Description" class="validate" formControlName="Proj_Name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker3" placeholder="Bid Deadline" [value]="bidDeadline.value" formControlName="Bid_Deadline">
+          <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+          <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker2" placeholder="Pre-Bid Meeting Date" [value]="preBidDttm.value" formControlName="PreBidDttm">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Pre-Bid Meeting Location" class="validate" formControlName="Pre_Bid_Location">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="number" placeholder="DBE Percent" class="validate" formControlName="Dbe_Percentage">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select placeholder="DBE Owner" class="validate" formControlName="Dbe_Owner" [value]="dbeOwner.value">
+            <mat-option value="DBE OWNER 1">DBE OWNER 1</mat-option>
+            <mat-option value="DBE OWNER 2">DBE OWNER 2</mat-option>
+            <mat-option value="DBE OWNER 3">DBE OWNER 3</mat-option>
+            <mat-option value="DBE OWNER 4">DBE OWNER 4</mat-option>
+            <mat-option value="DBE OWNER 5">DBE OWNER 5</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="bid.Bid_Type !== null">
+          <div *ngIf="bid.Bid_Type === 'IFB' || bid.Bid_Type === 'RFP'">
+            <mat-form-field>
+              <mat-select placeholder="Material Type" class="validate" formControlName="Material_Type" [value]="materialType.value">
+                <mat-option value="Bid">Bid</mat-option>
+                <mat-option value="Surplus">Surplus</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <button mat-raised-button color="primary" type="submit">Submit Changes</button>
+      </form>
     </mat-expansion-panel>
 
     <mat-divider *ngIf="panelOpenState"></mat-divider>

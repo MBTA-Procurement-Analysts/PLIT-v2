@@ -3,6 +3,7 @@ import { BidService } from '../services/bid.service';
 import { Bid, Buyer } from '../models/bid';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-bid',
@@ -35,13 +36,14 @@ export class BidComponent implements OnInit {
   constructor(
     private bidService: BidService,
     private formBuilder: FormBuilder,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.getBids();
 
     this.bidForm  =  this.formBuilder.group({
-        Buyer: ['', Validators.required],
+        Buyer: [this.authService.currentUser.username, Validators.required],
         Req_ID: ['', Validators.required],
         Proj_Name: ['', Validators.required],
         Fund_Code: this.fundCode,
@@ -71,7 +73,7 @@ export class BidComponent implements OnInit {
       this.bid = new Bid();
       this.buyer = new Buyer();
       this.bid.Buyer = new Buyer();
-      this.buyer.fullname = this.bidForm.controls.Buyer.value;
+      this.buyer.username = this.bidForm.controls.Buyer.value;
       this.bid.Buyer.fullname = this.buyer.fullname;
       this.bid.Req_ID = this.bidForm.controls.Req_ID.value;
       this.bid.Proj_Name = this.bidForm.controls.Proj_Name.value;

@@ -8,16 +8,18 @@ import { PoComponent } from './po/po.component';
 import { ReqDetailsComponent } from './req-details/req-details.component';
 import { BidComponent } from './bid/bid.component';
 import { BidDetailsComponent } from './bid-details/bid-details.component';
+import { PoDetailsComponent } from './po-details/po-details.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'dashboard', redirectTo: 'dashboard/reqs', pathMatch: 'full' },
   { path: 'dashboard/reqs', component: DashboardComponent },
-  { path: 'dashboard/po', component: PoComponent },
+  { path: 'dashboard/pos', component: PoComponent },
   { path: 'self-service', redirectTo: 'self-service/bids', pathMatch: 'full' },
   { path: 'self-service/bids', component: BidComponent },
   { path: 'dashboard/reqs/:id', component: ReqDetailsComponent },
   { path: 'self-service/bids/:id', component: BidDetailsComponent },
+  { path: 'dashboard/pos/:id', component: PoDetailsComponent },
   { path: 'login', component: LoginComponent },
 ];
 
