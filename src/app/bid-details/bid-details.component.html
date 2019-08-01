@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="bid">
   <div class="bid-details-container">
     <div class="mat-headline">
       {{ bid.Bid_ID }}
@@ -61,7 +61,7 @@
           </mat-select>
         </mat-form-field>
 
-        <div *ngIf="bid.Bid_Type !== null">
+        <div *ngIf="bid?.Bid_Type">
           <div *ngIf="bid.Bid_Type === 'IFB' || bid.Bid_Type === 'RFP'">
             <mat-form-field>
               <mat-select placeholder="Material Type" class="validate" formControlName="Material_Type" [value]="materialType.value">

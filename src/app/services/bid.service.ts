@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Bid } from '../models/bid';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BidService {
-  private bidsUrl = 'http://localhost:3000/api/bids';
-  private addBidUrl = 'http://localhost:3000/api/add-bid';
-  private getBidUrl = 'http://localhost:3000/api/bid/';
-  private updateBidUrl = 'http://localhost:3000/api/update-bid/'
-  private deleteBidUrl = 'http://localhost:3000/api/remove-bid/';
+  private bidsUrl =  environment.apiUrl + 'bids';
+  private addBidUrl =  environment.apiUrl + 'add-bid';
+  private getBidUrl =  environment.apiUrl + 'bid/';
+  private updateBidUrl =  environment.apiUrl + 'update-bid/'
+  private deleteBidUrl =  environment.apiUrl + 'remove-bid/';
 
   constructor(
     private http: HttpClient

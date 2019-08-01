@@ -27,7 +27,8 @@ export class PoComponent implements OnInit {
     'Business Unit',
     'Po No',
     'Po Date',
-    'Vendor'
+    'Vendor',
+    'FMIS'
   ];
 
   constructor(

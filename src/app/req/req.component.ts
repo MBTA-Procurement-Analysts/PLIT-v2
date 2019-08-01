@@ -51,8 +51,8 @@ export class ReqComponent implements OnInit {
       this.authService.globalCurrentUser.subscribe(user => this.currentUser = user);
       this.getReqs(this.currentUser.username.toUpperCase());
     });
-    this.authService.globalCurrentUser.subscribe(user => this.currentUser = user);
-    this.getReqs(this.currentUser.username.toUpperCase());
+    // this.authService.globalCurrentUser.subscribe(user => this.currentUser = user);
+    // this.getReqs(this.currentUser.username.toUpperCase());
   }
 
   ngAfterViewInit() {
@@ -93,7 +93,8 @@ export class ReqComponent implements OnInit {
             Status: this.allReqs[i].Status,
             lines: this.allReqs[i].lines,
             User_Notes: this.allReqs[i].User_Notes,
-            flag: this.allReqs[i].flag
+            flag: this.allReqs[i].flag,
+            worklist: this.allReqs[i].worklist
           }
         }
       }

@@ -17,7 +17,10 @@ export class ReqDetailsComponent implements OnInit {
   commentForm: FormGroup;
   userNotes: User_Notes;
   currentUser: User;
+  initialUser: User;
   date = new FormControl(new Date().getTime());
+  user: User;
+  interval;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,16 +28,24 @@ export class ReqDetailsComponent implements OnInit {
     private reqService: ReqService,
     private authService: AuthService,
     private formBuilder: FormBuilder
-  ) {}
-
+    ) { }
   ngOnInit() {
+    this.interval = setInterval(()=>{    //<<<---    using ()=> syntax
+      this.getReq()
+    }, 1000);
+
     this.getReq()
     this.currentUser = this.authService.currentUser;
+    this.initialUser = this.authService.initialUser;
     this.commentForm = this.formBuilder.group({
-      User: [this.currentUser.username, Validators.required],
+      User: [this.initialUser.username, Validators.required],
       Date: this.date,
-      Note_Info: ['', Validators.compose([Validators.required, Validators.maxLength(25)])]
+      Note_Info: ['', Validators.required]
     })
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.interval);
   }
 
   getReq() {
@@ -43,7 +54,6 @@ export class ReqDetailsComponent implements OnInit {
     .subscribe(
       req => {
         this.req = req[0];
-        console.log(this.req);
       }
     );
   }

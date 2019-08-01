@@ -13,10 +13,10 @@
         <mat-tab>
           <ng-template mat-tab-label>
             All
-            <mat-chip *ngIf="allReqInfo != null" >{{allReqInfo.length}}</mat-chip>
+            <mat-chip *ngIf="allReqs != null" >{{allReqs.length }}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
-           <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
+           <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation" *ngIf="tempDataSource">
 
               <ng-container matColumnDef="color">
                 <th mat-header-cell *matHeaderCellDef></th>
@@ -48,14 +48,13 @@
                <th mat-header-cell *matHeaderCellDef> FLAG </th>
                <td mat-cell *matCellDef="let all">
                  <div>
-                   <!-- ADD REQ FLAG ISN'T WORKING BECAUSE USERS DO NOT HAVE FLAG ATTRIBUTE -->
-                   <mat-checkbox [checked]="all.Req_Info.flag" (click)="changeFlag(all)"></mat-checkbox>
+                   <mat-checkbox [(ngModel)]="all.Req_Info.flag" (click)="changeFlag(all)"></mat-checkbox>
                 </div>
                </td>
              </ng-container>
 
              <ng-container matColumnDef="Business Unit">
-               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(allReqInfo)">
+               <th mat-header-cell *matHeaderCellDef (click)="filterByBusinessUnit(allReqs)">
                 <div *ngIf="filterBusinessUnitFlag === 0">
                   Business Unit
                 </div>
@@ -99,7 +98,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let all">
-                 <div *ngIf="all.Req_Info.REQ_Date !== null">
+                 <div *ngIf="all.Req_Info?.REQ_Date !== null">
                    {{ getDateDifference(all.Req_Info.REQ_Date) }}
                 </div>
               </td>
@@ -120,7 +119,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let all">
-                 <div *ngIf="all.Req_Info.Approved_On !== null">
+                 <div *ngIf="all.Req_Info?.Approved_On !== null">
                    {{ getDateDifference(all.Req_Info.Approved_On) }}
                  </div>
                </td>
@@ -140,13 +139,13 @@
                    </i>
                  </span>
                </th>
-               <td mat-cell *matCellDef="let all"> {{ addLines(all.Req_Info.lines) | currency }} </td>
+               <td mat-cell *matCellDef="let all"> {{ addLines(all.Req_Info?.lines) | currency }} </td>
              </ng-container>
 
              <ng-container matColumnDef="Requested Vendor">
                <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
                <td mat-cell *matCellDef="let all">
-                 <div *ngIf="all.Req_Info.Vendor !== null">
+                 <div *ngIf="all.Req_Info?.Vendor !== null">
                    {{all.Req_Info.Vendor.Name}}
                  </div>
                </td>
@@ -155,8 +154,8 @@
              <ng-container matColumnDef="Description">
                <th mat-header-cell *matHeaderCellDef> Description </th>
                <td mat-cell *matCellDef="let all">
-                 <div *ngIf="all.Req_Info.Department !== null">
-                   {{all.Req_Info.Department.Description}}
+                 <div *ngIf="all.Req_Info?.Department !== null">
+                   {{all.Req_Info.lines[0].More_Info | slice:0:20  }}
                  </div>
                </td>
              </ng-container>
@@ -164,10 +163,10 @@
               <ng-container matColumnDef="Comments">
                 <th mat-header-cell *matHeaderCellDef> Comments </th>
                 <td mat-cell *matCellDef="let all">
-                  <div *ngIf="all.Req_Info.User_Notes?.Note_Info">
-                    {{ all.Req_Info.User_Notes[all.Req_Info.User_Notes.length - 1].Note_Info }} <br>
+                  <div *ngIf="all.Req_Info?.User_Notes?.length > 0">
+                    {{ all.Req_Info.User_Notes[all.Req_Info.User_Notes.length - 1].Note_Info | slice:0:20 }} <br>
                     <div *ngIf="all.Req_Info.User_Notes.length > 1">
-                      {{ all.Req_Info.User_Notes[all.Req_Info.User_Notes.length - 2].Note_Info }}
+                      {{ all.Req_Info.User_Notes[all.Req_Info.User_Notes.length - 2].Note_Info | slice:0:20 }}
                     </div>
                   </div>
                 </td>
@@ -187,7 +186,7 @@
         <mat-tab>
           <ng-template mat-tab-label>
             Action
-            <mat-chip class="action-chip" *ngIf="actionReqs != null" >{{actionReqs.length}} / {{allReqInfo.length}}</mat-chip>
+            <mat-chip class="action-chip" *ngIf="actionReqs != null" >{{actionReqs.length}} / {{allReqs.length}}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
            <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
@@ -204,7 +203,7 @@
                <th mat-header-cell *matHeaderCellDef> FLAG </th>
                <td mat-cell *matCellDef="let action">
                  <div>
-                   <mat-checkbox></mat-checkbox>
+                   <mat-checkbox [(ngModel)]="action.Req_Info.flag" (click)="changeFlag(action, MatCheckboxChange)"></mat-checkbox>
                 </div>
                </td>
              </ng-container>
@@ -238,7 +237,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let action">
-                 <div *ngIf="action.Req_Info.REQ_Date !== null">
+                 <div *ngIf="action.Req_Info?.REQ_Date !== null">
                    {{ getDateDifference(action.Req_Info.REQ_Date) }}
                  </div>
                </td>
@@ -259,7 +258,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let action">
-                 <div *ngIf="action.Req_Info.Approved_On !== null">
+                 <div *ngIf="action.Req_Info?.Approved_On !== null">
                    {{ getDateDifference(action.Req_Info.Approved_On) }}
                  </div>
                </td>
@@ -279,13 +278,13 @@
                    </i>
                  </span>
                </th>
-               <td mat-cell *matCellDef="let action"> {{ addLines(action.Req_Info.lines) | currency }} </td>
+               <td mat-cell *matCellDef="let action"> {{ addLines(action.Req_Info?.lines) | currency }} </td>
              </ng-container>
 
              <ng-container matColumnDef="Requested Vendor">
                <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
                <td mat-cell *matCellDef="let action">
-                 <div *ngIf="action.Req_Info.Vendor !== null">
+                 <div *ngIf="action.Req_Info?.Vendor !== null">
                    {{action.Req_Info.Vendor.Vendor_Name}}
                  </div>
                </td>
@@ -294,8 +293,8 @@
              <ng-container matColumnDef="Description">
                <th mat-header-cell *matHeaderCellDef> Description </th>
                <td mat-cell *matCellDef="let action">
-                 <div *ngIf="action.Req_Info.Department !== null">
-                   {{action.Req_Info.Department.Description}}
+                 <div *ngIf="action.Req_Info?.Department !== null">
+                   {{action.Req_Info.lines[0].More_Info | slice:0:20  }}
                  </div>
                </td>
              </ng-container>
@@ -303,10 +302,10 @@
              <ng-container matColumnDef="Comments">
                <th mat-header-cell *matHeaderCellDef> Comments </th>
                <td mat-cell *matCellDef="let action">
-                 <div *ngIf="action.Req_Info.User_Notes?.Note_Info">
-                   {{ action.Req_Info.User_Notes[action.Req_Info.User_Notes.length - 1].Note_Info }}
+                 <div *ngIf="action.Req_Info?.User_Notes?.length > 0">
+                   {{ action.Req_Info.User_Notes[action.Req_Info.User_Notes.length - 1].Note_Info | slice:0:20 }}
                    <div *ngIf="action.Req_Info.User_Notes.length > 1">
-                     {{ action.Req_Info.User_Notes[action.Req_Info.User_Notes.length - 2].Note_Info }}
+                     {{ action.Req_Info.User_Notes[action.Req_Info.User_Notes.length - 2].Note_Info | slice:0:20 }}
                    </div>
                  </div>
                </td>
@@ -326,7 +325,7 @@
         <mat-tab>
           <ng-template mat-tab-label>
             Hold
-            <mat-chip class="hold-chip" *ngIf="holdReqs !== null" >{{holdReqs.length}} / {{allReqInfo.length}}</mat-chip>
+            <mat-chip class="hold-chip" *ngIf="holdReqs !== null" >{{holdReqs.length}} / {{allReqs.length}}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
            <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
@@ -343,7 +342,7 @@
                <th mat-header-cell *matHeaderCellDef> FLAG </th>
                <td mat-cell *matCellDef="let hold">
                  <div>
-                   <mat-checkbox></mat-checkbox>
+                   <mat-checkbox [(ngModel)]="hold.Req_Info.flag" (click)="changeFlag(hold, MatCheckboxChange)"></mat-checkbox>
                 </div>
                </td>
              </ng-container>
@@ -377,7 +376,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let hold">
-                 <div *ngIf="hold.Req_Info.REQ_Date !== null">
+                 <div *ngIf="hold.Req_Info?.REQ_Date !== null">
                    {{ getDateDifference(hold.Req_Info.REQ_Date) }}
                  </div>
                </td>
@@ -398,7 +397,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let hold">
-                 <div *ngIf="hold.Req_Info.Approved_On !== null">
+                 <div *ngIf="hold.Req_Info?.Approved_On !== null">
                    {{ getDateDifference(hold.Req_Info.Approved_On) }}
                  </div>
                </td>
@@ -418,13 +417,13 @@
                    </i>
                  </span>
                </th>
-               <td mat-cell *matCellDef="let hold"> {{ addLines(hold.Req_Info.lines) | currency }} </td>
+               <td mat-cell *matCellDef="let hold"> {{ addLines(hold.Req_Info?.lines) | currency }} </td>
              </ng-container>
 
              <ng-container matColumnDef="Requested Vendor">
                <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
                <td mat-cell *matCellDef="let hold">
-                 <div *ngIf="hold.Req_Info.Vendor !== null">
+                 <div *ngIf="hold.Req_Info?.Vendor !== null">
                    {{hold.Req_Info.Vendor.Vendor_Name}}
                  </div>
                </td>
@@ -433,8 +432,8 @@
              <ng-container matColumnDef="Description">
                <th mat-header-cell *matHeaderCellDef> Description </th>
                <td mat-cell *matCellDef="let hold">
-                 <div *ngIf="hold.Req_Info.Department !== null">
-                   {{hold.Req_Info.Department.Description}}
+                 <div *ngIf="hold.Req_Info?.Department !== null">
+                   {{hold.Req_Info.lines[0].More_Info | slice:0:20  }}
                  </div>
                </td>
              </ng-container>
@@ -442,10 +441,10 @@
              <ng-container matColumnDef="Comments">
                <th mat-header-cell *matHeaderCellDef> Comments </th>
                <td mat-cell *matCellDef="let hold">
-                 <div *ngIf="hold.Req_Info.User_Notes?.Note_Info">
-                   {{ hold.Req_Info.User_Notes[hold.Req_Info.User_Notes.length - 1].Note_Info }}
+                 <div *ngIf="hold.Req_Info?.User_Notes?.length > 0">
+                   {{ hold.Req_Info.User_Notes[hold.Req_Info.User_Notes.length - 1].Note_Info | slice:0:20 }}
                    <div *ngIf="hold.Req_Info.User_Notes.length > 1">
-                     {{ hold.Req_Info.User_Notes[hold.Req_Info.User_Notes.length - 2].Note_Info }}
+                     {{ hold.Req_Info.User_Notes[hold.Req_Info.User_Notes.length - 2].Note_Info | slice:0:20 }}
                    </div>
                  </div>
                </td>
@@ -465,7 +464,7 @@
         <mat-tab>
           <ng-template mat-tab-label>
             Transmission
-            <mat-chip class="transmission-chip" *ngIf="transmissionReqs !== null">{{transmissionReqs.length}} / {{allReqInfo.length}}</mat-chip>
+            <mat-chip class="transmission-chip" *ngIf="transmissionReqs !== null">{{transmissionReqs.length}} / {{allReqs.length}}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
            <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
@@ -482,7 +481,7 @@
                <th mat-header-cell *matHeaderCellDef> FLAG </th>
                <td mat-cell *matCellDef="let transmission">
                  <div>
-                   <mat-checkbox></mat-checkbox>
+                   <mat-checkbox [(ngModel)]="transmission.Req_Info.flag" (click)="changeFlag(transmission, MatCheckboxChange)"></mat-checkbox>
                 </div>
                </td>
              </ng-container>
@@ -516,7 +515,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let transmission">
-                 <div *ngIf="transmission.Req_Info.REQ_Date !== null">
+                 <div *ngIf="transmission.Req_Info?.REQ_Date !== null">
                    {{ getDateDifference(transmission.Req_Info.REQ_Date) }}
                  </div>
                </td>
@@ -537,7 +536,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let transmission">
-                 <div *ngIf="transmission.Req_Info.Approved_On !== null">
+                 <div *ngIf="transmission.Req_Info?.Approved_On !== null">
                    {{ getDateDifference(transmission.Req_Info.Approved_On) }}
                  </div>
                </td>
@@ -557,13 +556,13 @@
                    </i>
                  </span>
                </th>
-               <td mat-cell *matCellDef="let transmission"> {{ addLines(transmission.Req_Info.lines) | currency }} </td>
+               <td mat-cell *matCellDef="let transmission"> {{ addLines(transmission.Req_Info?.lines) | currency }} </td>
              </ng-container>
 
              <ng-container matColumnDef="Requested Vendor">
                <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
                <td mat-cell *matCellDef="let transmission">
-                 <div *ngIf="transmission.Req_Info.Vendor !== null">
+                 <div *ngIf="transmission.Req_Info?.Vendor !== null">
                    {{transmission.Req_Info.Vendor.Vendor_Name }}
                  </div>
                </td>
@@ -572,8 +571,8 @@
              <ng-container matColumnDef="Description">
                <th mat-header-cell *matHeaderCellDef> Description </th>
                <td mat-cell *matCellDef="let transmission">
-                 <div *ngIf="transmission.Req_Info.Department !== null">
-                   {{transmission.Req_Info.Department.Description}}
+                 <div *ngIf="transmission.Req_Info?.Department !== null">
+                   {{transmission.Req_Info.lines[0].More_Info | slice:0:20  }}
                  </div>
                </td>
              </ng-container>
@@ -581,10 +580,10 @@
              <ng-container matColumnDef="Comments">
                <th mat-header-cell *matHeaderCellDef> Comments </th>
                <td mat-cell *matCellDef="let transmission">
-                 <div *ngIf="transmission.Req_Info.User_Notes?.Note_Info">
-                   {{ transmission.Req_Info.User_Notes[transmission.Req_Info.User_Notes.length - 1].Note_Info }}
+                 <div *ngIf="transmission.Req_Info?.User_Notes?.length > 0">
+                   {{ transmission.Req_Info.User_Notes[transmission.Req_Info.User_Notes.length - 1].Note_Info | slice:0:20 }}
                    <div *ngIf="transmission.Req_Info.User_Notes.length > 1">
-                     {{ transmission.Req_Info.User_Notes[transmission.Req_Info.User_Notes.length - 2].Note_Info }}
+                     {{ transmission.Req_Info.User_Notes[transmission.Req_Info.User_Notes.length - 2].Note_Info | slice:0:20 }}
                    </div>
                  </div>
                </td>
@@ -604,7 +603,7 @@
         <mat-tab>
           <ng-template mat-tab-label>
             Out To Bid
-            <mat-chip class="out-chip" *ngIf="outToBidReqs !== null">{{outToBidReqs.length}} / {{allReqInfo.length}}</mat-chip>
+            <mat-chip class="out-chip" *ngIf="outToBidReqs !== null">{{outToBidReqs.length}} / {{allReqs.length}}</mat-chip>
           </ng-template>
           <div *ngIf="reqsLoaded" class="table-container">
            <table mat-table [dataSource]="dataSource | search : 'Req_ID' : searchText" class="mat-elevation">
@@ -621,7 +620,7 @@
                <th mat-header-cell *matHeaderCellDef> FLAG </th>
                <td mat-cell *matCellDef="let out">
                  <div>
-                   <mat-checkbox></mat-checkbox>
+                   <mat-checkbox [(ngModel)]="out.Req_Info.flag" (click)="changeFlag(out, MatCheckboxChange)"></mat-checkbox>
                 </div>
                </td>
              </ng-container>
@@ -655,7 +654,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let out">
-                 <div *ngIf="out.Req_Info.REQ_Date !== null">
+                 <div *ngIf="out.Req_Info?.REQ_Date !== null">
                    {{ getDateDifference(out.Req_Info.REQ_Date) }}
                  </div>
                </td>
@@ -676,7 +675,7 @@
                  </span>
                </th>
                <td mat-cell *matCellDef="let out">
-                 <div *ngIf="out.Req_Info.Approved_On !== null">
+                 <div *ngIf="out.Req_Info?.Approved_On !== null">
                    {{ getDateDifference(out.Req_Info.Approved_On) }}
                  </div>
                </td>
@@ -696,13 +695,13 @@
                    </i>
                  </span>
                </th>
-               <td mat-cell *matCellDef="let out"> {{ addLines(out.Req_Info.lines) | currency }} </td>
+               <td mat-cell *matCellDef="let out"> {{ addLines(out.Req_Info?.lines) | currency }} </td>
              </ng-container>
 
              <ng-container matColumnDef="Requested Vendor">
                <th mat-header-cell *matHeaderCellDef> Requested Vendor </th>
                <td mat-cell *matCellDef="let out">
-                 <div *ngIf="out.Req_Info.Vendor !== null">
+                 <div *ngIf="out.Req_Info?.Vendor !== null">
                    {{out.Req_Info.Vendor.Vendor_Name }}
                  </div>
                </td>
@@ -711,8 +710,8 @@
              <ng-container matColumnDef="Description">
                <th mat-header-cell *matHeaderCellDef> Description </th>
                <td mat-cell *matCellDef="let out">
-                 <div *ngIf="out.Req_Info.Department !== null">
-                   {{out.Req_Info.Department.Description}}
+                 <div *ngIf="out.Req_Info?.Department !== null">
+                   {{out.Req_Info.lines[0].More_Info | slice:0:20  }}
                  </div>
                </td>
              </ng-container>
@@ -720,10 +719,10 @@
              <ng-container matColumnDef="Comments">
                <th mat-header-cell *matHeaderCellDef> Comments </th>
                <td mat-cell *matCellDef="let out">
-                 <div *ngIf="out.Req_Info.User_Notes?.Note_Info">
-                   {{ out.Req_Info.User_Notes[out.Req_Info.User_Notes.length - 1].Note_Info }}
+                 <div *ngIf="out.Req_Info?.User_Notes?.length > 0">
+                   {{ out.Req_Info.User_Notes[out.Req_Info.User_Notes.length - 1].Note_Info | slice:0:20 }}
                    <div *ngIf="out.Req_Info.User_Notes.length > 1">
-                     {{ out.Req_Info.User_Notes[out.Req_Info.User_Notes.length - 2].Note_Info }}
+                     {{ out.Req_Info.User_Notes[out.Req_Info.User_Notes.length - 2].Note_Info | slice:0:20 }}
                    </div>
                  </div>
                </td>
@@ -745,6 +744,9 @@
    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 100]" [showFirstLastButtons]="true" [length]="totalSize"
      [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
    </mat-paginator>
+   <div>
+     Data Last Updated: {{ dataLastUpdated?.last_updated_time | date:'medium' }}
+   </div>
   </div>
 </div>
 <router-outlet></router-outlet>

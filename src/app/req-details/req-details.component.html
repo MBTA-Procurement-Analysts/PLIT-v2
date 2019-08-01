@@ -1,126 +1,122 @@
 <div class="container" *ngIf="req?.REQ_No" >
   <div class="req-container">
-    <div class="mat-headline">
-      Requisition #{{req.REQ_No}} Details
-      <button mat-raised-button color="primary" class="float-right" (click)="goBack()">Back To Req List</button>
-    </div>
-    <span class="badge badge-success font-weight-light"> Buyer: {{ req.Buyer }} </span>
-    <span class="badge badge-dark font-weight-light"> Created: {{ getDateDifference(req.REQ_Date) }} days ago</span>
-    <span class="badge badge-dark font-weight-light"> Approved: {{ getDateDifference(req.Approved_On) }} days ago</span>
+    <div class="row">
+      <div class="col-8 req-detail-container">
+        <div class="mat-headline">
+          Requisition #{{req.REQ_No}} Details
+          <button *ngIf="req.worklist"  mat-raised-button color="accent" class="float-right" routerLink="worklist">Req Worklist</button>
+          <button mat-raised-button color="primary" class="float-right" (click)="goBack()">Back To Req List</button>
+        </div>
+        <span class="badge badge-success font-weight-light"> Buyer: {{ req.Buyer }} </span>
+        <span class="badge badge-dark font-weight-light"> Created: {{ getDateDifference(req.REQ_Date) }} days ago</span>
+        <span class="badge badge-dark font-weight-light"> Approved: {{ getDateDifference(req.Approved_On) }} days ago</span>
 
-    <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">Ship To:</th>
-          <th scope="col">Req ID</th>
-          <th scope="col">Date</th>
-          <th scope="col">Approved Requester</th>
-          <th scope="col">Currency</th>
-          <th scope="col">Fund</th>
-          <th scope="col">Account</th>
-          <th scope="col">Dept</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            {{ req.Ship_To.Description }}
-            <br>
-            {{ req.Ship_To.Address_1 }}
-            <br>
-            {{ req.Ship_To.City }}
-            {{ req.Ship_To.State }},
-            {{ req.Ship_To.Zip_Code }}
-          </td>
-          <td> {{ req.REQ_No }} </td>
-          <td> {{ req.REQ_Date | date:'medium' }} </td>
-          <td> {{ req.Approved_By }} </td>
-          <td> {{ req.Currency }} </td>
-          <td> {{ req.Fund }} </td>
-          <td> {{ req.Account }} </td>
-          <td> {{ req.Department.Number }} </td>
-        </tr>
-      </tbody>
-    </table>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Ship To:</th>
+              <th scope="col">Req ID</th>
+              <th scope="col">Date</th>
+              <th scope="col">Approved Requester</th>
+              <th scope="col">Currency</th>
+              <th scope="col">Fund</th>
+              <th scope="col">Account</th>
+              <th scope="col">Dept</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {{ req.Ship_To.Description }}
+                <br>
+                {{ req.Ship_To.Address_1 }}
+                <br>
+                {{ req.Ship_To.City }}
+                {{ req.Ship_To.State }},
+                {{ req.Ship_To.Zip_Code }}
+              </td>
+              <td> {{ req.REQ_No }} </td>
+              <td> {{ req.REQ_Date | date:'medium' }} </td>
+              <td> {{ req.Approved_By }} </td>
+              <td> {{ req.Currency }} </td>
+              <td> {{ req.Fund }} </td>
+              <td> {{ req.Account }} </td>
+              <td> {{ req.Department.Number }} </td>
+            </tr>
+          </tbody>
+        </table>
 
-    <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-    <div class="mat-headline">
-      Lines
-    </div>
-    <mat-divider></mat-divider>
+        <div class="mat-headline">
+          Lines
+        </div>
+        <mat-divider></mat-divider>
 
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">Ln/Schd</th>
-          <th scope="col">Item</th>
-          <th scope="col">Description</th>
-          <th scope="col">Mfg ID</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">UOM</th>
-          <th scope="col">Price</th>
-          <th scope="col">Ext. Amt</th>
-          <th scope="col">Due Date</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr *ngFor="let line of req?.lines">
-            <td> {{ line.Line_No }} - {{ line.Schedule_No }} </td>
-            <td> {{ line.Item }}  </td>
-            <td> Description </td>
-            <td> {{ line.MFG_ID }} </td>
-            <td> {{ line.Quantity }} </td>
-            <td> {{ line.UOM }} </td>
-            <td> {{ line.Line_Total | currency }}</td>
-            <td> Ext amt </td>
-            <td> {{ line.Due_Date | date:'medium' }} </td>
-          </tr>
-          <tr>
-            <th scope="row">Total Requisition Amount: </th>
-            <td colspan="8"> {{ addLines(req.lines) | currency }} </td>
-          </tr>
-      </tbody>
-    </table>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Ln/Schd</th>
+              <th scope="col">Item</th>
+              <th scope="col">Description</th>
+              <th scope="col">Mfg ID</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">UOM</th>
+              <th scope="col">Price</th>
+              <th scope="col">Ext. Amt</th>
+              <th scope="col">Due Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let line of req?.lines">
+              <td> {{ line.Line_No }} - {{ line.Schedule_No }} </td>
+              <td> {{ line.Item }}  </td>
+              <td> {{ line.More_Info }} </td>
+              <td> {{ line.MFG_ID }} </td>
+              <td> {{ line.Quantity }} </td>
+              <td> {{ line.UOM }} </td>
+              <td> {{ line.Line_Total | currency }}</td>
+              <td> Ext amt </td>
+              <td> {{ line.Due_Date | date:'medium' }} </td>
+            </tr>
+            <tr>
+              <th scope="row">Total Requisition Amount: </th>
+              <td colspan="8"> {{ addLines(req.lines) | currency }} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <mat-divider></mat-divider>
+      <div class="col-4 d-none d-lg-block">
+        <div class="mat-headline text-center">
+          Notes
+        </div>
+        <div class="note-container">
+          <div *ngIf="req?.User_Notes">
+            <div *ngFor="let note of req?.User_Notes">
+              <div *ngIf="note?.User === currentUser?.username">
+                <div class="speech-bubble-user float-right">
+                  {{ note?.User }}: <span class="note-info" data-toggle="tooltip" title="{{note?.Date | date:'short' }}">{{ note?.Note_Info }}</span>
+                </div>
+              </div>
+              <div *ngIf="note?.User !== currentUser?.username">
+                <div class="speech-bubble-admin float-left">
+                  {{ note?.User }}:  <span class="note-info" data-toggle="tooltip" title="{{note?.Date | date:'short' }}">{{ note?.Note_Info }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <div class="mat-headline">
-      Notes
-    </div>
-    <mat-divider></mat-divider>
-
-    <div *ngIf="req?.User_Notes">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">User</th>
-            <th scope="col">Date</th>
-            <th scope="col">Note</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let note of req?.User_Notes">
-            <td colspan="1"> {{ note?.User}} </td>
-            <td colspan="1"> {{ note?.Date | date:'short' }} </td>
-            <td colspan="4"> {{ note?.Note_Info }} </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <mat-divider></mat-divider>
-
-    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
-      <mat-form-field>
-        <input matInput placeholder="comment" class="validate" formControlName="Note_Info">
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" class="float-right">Add Note</button>
-    </form>
-    <div *ngIf="commentForm.controls['Note_Info'].hasError('maxlength')">
-      25 CHARACTER LIMIT
+        <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+          <mat-form-field>
+            <input matInput placeholder="comment" class="validate" formControlName="Note_Info">
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit" class="float-right">Add Note</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>

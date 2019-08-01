@@ -35,15 +35,14 @@ export class AuthService {
   currentUserRole: string;
   userArrayLength = 0;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {
+    this.getUsers();
+  }
 
   public login(userInfo: User): boolean {
-    this.getUsers();
-    let isUser = false;
     console.log(userInfo);
     for(var i=0; i < this.userArrayLength;  i++) {
       if(this.users[i].username === userInfo.username && this.users[i].role === userInfo.password) {
-        isUser = true;
         this.currentUserRole = userInfo.role;
         this.currentUser._id = this.users[i]._id;
         this.currentUser.username = this.users[i].username;
@@ -60,12 +59,13 @@ export class AuthService {
         this.initialUser.fullname = this.users[i].fullname;
         this.initialUser.email = this.users[i].email;
         this.initialUser.loggedInBefore = this.users[i].loggedInBefore;
+        this.setInitialUser(this.initialUser);
+        this.changeUser(this.currentUser);
+        return true;
       }
     }
-    this.setInitialUser(this.initialUser);
-    this.changeUser(this.currentUser);
-    console.log(isUser);
-    return isUser;
+    console.log('Incorrect Login Info');
+    return false;
   }
 
   public isAdmin(){

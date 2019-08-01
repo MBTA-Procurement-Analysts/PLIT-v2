@@ -31,6 +31,11 @@
          <td mat-cell *matCellDef="let po"> {{ po.Vendor_Name }} </td>
        </ng-container>
 
+       <ng-container matColumnDef="FMIS">
+         <th mat-header-cell *matHeaderCellDef> FMIS </th>
+         <td mat-cell *matCellDef="let po"><a href="https://financials.mbta.com/psp/MTFP89/EMPLOYEE/ERP/c/MANAGE_PURCHASE_ORDERS.PURCHASE_ORDER.GBL?BUSINESS_UNIT=MBTAI&PO_ID= + {{ po.PO_No }} + &Action=U&page=PO_LINE" target="blank"><i class="material-icons"> link </i></a></td>
+       </ng-container>
+
        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="white"></tr>
        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
      </table>

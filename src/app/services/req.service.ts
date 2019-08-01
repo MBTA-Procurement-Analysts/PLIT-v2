@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Req, User_Notes } from '../models/req';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReqService {
-  private reqsUrl = 'http://localhost:3000/api/reqs/';
-  private reqUrl = 'http://localhost:3000/api/req/';
-  private addReqFlagUrl = 'http://localhost:3000/api/req/addFlag/';
-  private removeReqFlagUrl = 'http://localhost:3000/api/req/unFlag/';
-  private addNoteUrl = 'http://localhost:3000/api/add-note/';
+  private reqsUrl = environment.apiUrl + 'reqs/';
+  private reqUrl = environment.apiUrl + 'req/';
+  private addReqFlagUrl = environment.apiUrl + 'req/addFlag/';
+  private removeReqFlagUrl = environment.apiUrl + 'req/unFlag/';
+  private addNoteUrl = environment.apiUrl + 'add-note/';
 
   constructor(
     private http: HttpClient
