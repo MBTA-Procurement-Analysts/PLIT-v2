@@ -22,7 +22,9 @@
               <mat-hint *ngIf="formControls.password.invalid && isSubmitted === true">Password is required</mat-hint>
             </mat-form-field>
           </p>
-          <button mat-raised-button color="primary" type="submit">Login</button>
+          <div class="d-flex justify-content-center">
+            <button mat-raised-button color="primary" type="submit">Login</button>
+          </div>
         </form>
       </mat-grid-tile>
     </mat-grid-list>

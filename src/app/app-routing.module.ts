@@ -9,6 +9,7 @@ import { ReqDetailsComponent } from './req-details/req-details.component';
 import { BidComponent } from './bid/bid.component';
 import { BidDetailsComponent } from './bid-details/bid-details.component';
 import { PoDetailsComponent } from './po-details/po-details.component';
+import { WorklistComponent } from './worklist/worklist.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const appRoutes: Routes = [
   { path: 'dashboard/reqs/:id', component: ReqDetailsComponent },
   { path: 'self-service/bids/:id', component: BidDetailsComponent },
   { path: 'dashboard/pos/:id', component: PoDetailsComponent },
+  { path: 'dashboard/reqs/:id/worklist', component: WorklistComponent },
   { path: 'login', component: LoginComponent },
 ];
 

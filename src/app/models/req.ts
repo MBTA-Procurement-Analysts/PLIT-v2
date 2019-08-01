@@ -18,6 +18,7 @@ export class Req {
       lines: Lines;
       User_Notes: User_Notes;
       flag: boolean;
+      worklist: Worklist;
   }
 
 export class Department {
@@ -64,4 +65,21 @@ export class User_Notes {
   User: string;
   Date: number;
   Note_Info: string
+}
+
+export class Worklist {
+  Appr_Inst: Number;
+  Work_List: string;
+  Approval_Number: string;
+  Appr_Stat: string;
+  Denial_Date_Time: Date;
+  User: string;
+  Unit: string;
+  PO_HDR_Status: string;
+  WF_APPR_Status: string;
+  Dispatch_DTTM: Date;
+  Threshold: string;
+  Buyer: string;
+  PO_Hdr_Created_Date: Date;
+  SUM_MERCHANDISE_AMT: number;
 }

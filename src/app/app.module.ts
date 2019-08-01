@@ -38,6 +38,7 @@ import { BidDetailsComponent } from './bid-details/bid-details.component';
 
 import { SearchPipe } from './pipes/search.pipe';
 import { PoDetailsComponent } from './po-details/po-details.component';
+import { WorklistComponent } from './worklist/worklist.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { PoDetailsComponent } from './po-details/po-details.component';
     BidComponent,
     BidDetailsComponent,
     SearchPipe,
-    PoDetailsComponent
+    PoDetailsComponent,
+    WorklistComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,8 @@ import { PoDetailsComponent } from './po-details/po-details.component';
   ],
   providers: [
     AuthService,
-    AuthGuard
+    AuthGuard,
+    DashboardComponent
   ],
   bootstrap: [AppComponent]
 })

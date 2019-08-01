@@ -28,6 +28,7 @@ export class PoDetailsComponent implements OnInit {
     return this.poService.getPo(id)
     .subscribe(
       po => {
+        console.log(po);
         this.po = po[0]
       }
     )

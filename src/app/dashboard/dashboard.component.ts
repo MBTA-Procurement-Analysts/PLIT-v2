@@ -4,7 +4,7 @@ import { Dashboard, Lines } from '../models/dashboard';
 import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
-import { filter, switchMap } from 'rxjs/operators';
+import { filter, flatMap } from 'rxjs/operators';
 import { ReqService } from '../services/req.service';
 import { Req } from '../models/req';
 import { MatPaginator } from '@angular/material';
@@ -17,7 +17,7 @@ import { MatTabChangeEvent } from '@angular/material';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  public pageSize = 5;
+  public pageSize = 10;
   public currentPage = 0;
   public totalSize = 0;
   public dataSource: any;
@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
     'Comments',
     'FMIS'
   ];
-  allReqInfo: Dashboard[];
+  allReqs: Dashboard[];
   actionReqs: Dashboard[];
   holdReqs: Dashboard[];
   outToBidReqs: Dashboard[];
@@ -51,6 +51,7 @@ export class DashboardComponent implements OnInit {
   filterBusinessUnitFlag: number = 0;
   sortByCreationFlag: number = 0;
   sortByApprovalFlag: number = 0;
+  dataLastUpdated: Date;
 
   constructor(
     private dashboardService: DashboardService,
@@ -67,103 +68,73 @@ export class DashboardComponent implements OnInit {
       this.authService.globalCurrentUser.subscribe(user => this.currentUser = user);
       this.currentPage = 0;
       this.getReqInfo(this.currentUser.username.toUpperCase());
+      this.reqsLoaded = Promise.resolve(true);
+
     });
     this.authService.globalCurrentUser.subscribe(user => this.currentUser = user);
     this.getReqInfo(this.currentUser.username.toUpperCase());
+    this.getDataLastUpdated();
+    this.reqsLoaded = Promise.resolve(true);
   }
 
-  getReqInfo(user: string) {
-    this.allReqInfo = [];
-    this.transmissionReqs = [];
-    this.outToBidReqs = [];
-    this.holdReqs = [];
-    this.actionReqs = [];
-    let counter = 0;
-    let flagCounter = 0;
-    this.dashboardService.getDashboard(user)
-      .pipe(
-        switchMap(req => req.map(
-          reqInfo => {
-            this.tempReq = {
-              _id: reqInfo._id,
-              REQ_No: reqInfo.REQ_No,
-              Business_Unit: reqInfo.Business_Unit,
-              Buyer: reqInfo.Buyer,
-              Req_ID: reqInfo.Req_ID,
-              Hold_From_Further_Processing: reqInfo.Hold_From_Further_Processing,
-              Hold_Status: reqInfo.Hold_Status,
-              Sourcing: reqInfo.Sourcing,
-              Lines_Not_Sourced: reqInfo.Lines_Not_Sourced,
-              Out_To_Bid: reqInfo.Out_To_Bid,
-              Transmitted: reqInfo.Transmitted,
-              Transmitted_Time: reqInfo.Transmitted_Time,
-              Req_Info: this.tempInfoReq = {
-                _id: null,
-                REQ_No: null,
-                Account: null,
-                Approved_By: null,
-                Approved_On: null,
-                Business_Unit: null,
-                Buyer: null,
-                Currency: null,
-                Department: null,
-                Fund: null,
-                Origin: null,
-                REQ_Date: null,
-                Requester: null,
-                Ship_To: null,
-                Status: null,
-                Vendor: null,
-                lines: null,
-                User_Notes: null,
-                flag: null
-              }
-            };
-            this.allReqInfo.push(this.tempReq);
-            return this.reqService.getReq(reqInfo.REQ_No);
-          }
-        )
-      )
-    )
-    .subscribe(
-      reqInfoObservable => {
-        reqInfoObservable.subscribe(
-          reqInfo => {
-            this.allReqInfo[counter].Req_Info = reqInfo[0];
-            this.allReqInfo[counter].Req_Info.flag = reqInfo[0].flag;
-            if (this.allReqInfo[counter].Transmitted === 'Y') {
-              this.transmissionReqs.push(this.allReqInfo[counter]);
-            } else if (this.allReqInfo[counter].Hold_From_Further_Processing === 'Y') {
-              this.holdReqs.push(this.allReqInfo[counter]);
-            } else if (this.allReqInfo[counter].Out_To_Bid === 'Y') {
-              this.outToBidReqs.push(this.allReqInfo[counter]);
-            } else {
-              this.actionReqs.push(this.allReqInfo[counter]);
-            };
-            if(this.allReqInfo[counter].Req_Info.flag === true) {
-              [this.tempDataSource[flagCounter], this.tempDataSource[counter]] = [this.tempDataSource[counter], this.tempDataSource[flagCounter]];
-              flagCounter++;
-            }
-            counter++;
-            this.dataSource = this.allReqInfo;
-            this.tempDataSource = this.allReqInfo;
-            this.dataSource.paginator = this.paginator;
-            this.totalSize = this.allReqInfo.length;
-            this.iterator();
-            this.reqsLoaded = Promise.resolve(true);
-          }
-        )
+  getDataLastUpdated() {
+    this.dashboardService.getUpdatedTime().subscribe(
+      time => {
+        this.dataLastUpdated = time;
       }
     )
   }
 
+  getReqInfo(user: string) {
+    this.allReqs = [];
+    this.transmissionReqs = [];
+    this.outToBidReqs = [];
+    this.holdReqs = [];
+    this.actionReqs = [];
+    this.dashboardService.getDashboard(user)
+    .pipe(
+      flatMap(
+        reqs => {
+          this.allReqs = reqs;
+          this.allReqs.map(
+            req => {
+              return this.reqService.getReq(req.REQ_No).subscribe(
+                reqInfo => {
+                  req.Req_Info = reqInfo[0]
+                  if(req.Transmitted === 'Y') {
+                    this.transmissionReqs.push(req);
+                  } else if(req.Hold_From_Further_Processing === 'Y') {
+                    this.holdReqs.push(req);
+                  } else if(req.Out_To_Bid === 'Y') {
+                    this.outToBidReqs.push(req);
+                  } else {
+                    this.actionReqs.push(req);
+                  }
+                  this.dataSource = this.allReqs;
+                  this.tempDataSource = this.allReqs;
+                  this.totalSize = this.allReqs.length;
+                  this.dataSource.paginator = this.paginator;
+                  this.iterator();
+                }
+              )
+            }
+          )
+          console.log(this.allReqs);
+          return this.allReqs;
+        }
+      )
+    ).subscribe()
+  }
+
   getDateDifference(date: Date) {
-    var oneDay = 1000 * 60 * 60 * 24;
-    var currentDate = new Date().getTime();
-    var reqDate = date.toString();
-    var reqDate1 = new Date(reqDate).getTime();
-    var difference = Math.round(((currentDate - reqDate1) / oneDay));
-    return difference;
+    if(date != null) {
+      var oneDay = 1000 * 60 * 60 * 24;
+      var currentDate = new Date().getTime();
+      var reqDate = date.toString();
+      var reqDate1 = new Date(reqDate).getTime();
+      var difference = Math.round(((currentDate - reqDate1) / oneDay));
+      return difference;
+    }
   }
 
   public handlePage(e: any) {
@@ -175,40 +146,35 @@ export class DashboardComponent implements OnInit {
   changeDataSource(dataSource: MatTabChangeEvent) {
     if (dataSource.index === 0) {
       this.currentPage = 0;
-      this.pageSize = 5;
-      this.dataSource = this.allReqInfo;
-      this.tempDataSource = this.allReqInfo;
-      this.totalSize = this.allReqInfo.length;
+      this.pageSize = 10;
+      this.tempDataSource = this.allReqs;
+      this.totalSize = this.allReqs.length;
       this.dataSource.paginator = this.paginator;
       this.iterator();
     } else if (dataSource.index === 1) {
       this.currentPage = 0;
-      this.pageSize = 5;
-      this.dataSource = this.actionReqs;
+      this.pageSize = 10;
       this.tempDataSource = this.actionReqs;
       this.totalSize = this.actionReqs.length;
       this.dataSource.paginator = this.paginator;
       this.iterator();
     } else if (dataSource.index === 2) {
       this.currentPage = 0;
-      this.pageSize = 5;
-      this.dataSource = this.holdReqs;
+      this.pageSize = 10;
       this.tempDataSource = this.holdReqs;
       this.totalSize = this.holdReqs.length;
       this.dataSource.paginator = this.paginator;
       this.iterator();
     } else if (dataSource.index === 3) {
       this.currentPage = 0;
-      this.pageSize = 5;
-      this.dataSource = this.transmissionReqs;
+      this.pageSize = 10;
       this.tempDataSource = this.transmissionReqs;
       this.totalSize = this.transmissionReqs.length;
       this.dataSource.paginator = this.paginator;
       this.iterator();
     } else if (dataSource.index === 4) {
       this.currentPage = 0;
-      this.pageSize = 5;
-      this.dataSource = this.outToBidReqs;
+      this.pageSize = 10;
       this.tempDataSource = this.outToBidReqs;
       this.totalSize = this.outToBidReqs.length;
       this.dataSource.paginator = this.paginator;
@@ -331,11 +297,30 @@ export class DashboardComponent implements OnInit {
   changeFlag(req: Dashboard) {
     console.log(req.Req_ID);
     if(req.Req_Info.flag === null || req.Req_Info.flag === false) {
-      this.addReqFlag(req.Req_ID);
+      let counter = 0;
+      this.tempDataSource.forEach((reqInArray: Dashboard) => {
+        if(req.Req_ID === reqInArray.Req_ID) {
+          this.addReqFlag(req.Req_ID);
+          this.tempDataSource.splice(counter, 1);
+          this.tempDataSource.unshift(reqInArray);
+          console.log(this.tempDataSource);
+          this.iterator();
+        }
+        counter++;
+      })
     } else {
-      this.removeReqFlag(req.Req_ID);
+      let counter = 0;
+      this.tempDataSource.forEach((reqInArray: Dashboard) => {
+        if(req.Req_ID === reqInArray.Req_ID) {
+          this.removeReqFlag(req.Req_ID);
+          this.tempDataSource.splice(counter, 1);
+          this.tempDataSource.push(reqInArray);
+          console.log(this.tempDataSource);
+          this.iterator();
+        }
+        counter++;
+      })
     }
-    this.router.navigate['dashboard/reqs'];
   }
 
   addReqFlag(req: string) {
