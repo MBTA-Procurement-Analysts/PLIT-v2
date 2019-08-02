@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Req, Worklist } from '../models/req';
 import { ReqService } from '../services/req.service';
 import { ActivatedRoute } from '@angular/router';
+import { TimelineEvent } from '../models/timeline_event'
 
 @Component({
   selector: 'app-worklist',
@@ -12,6 +13,7 @@ export class WorklistComponent implements OnInit {
   req: Req;
   worklist: Worklist;
   tomorrow = new Date(2017, 9, 20, 14,34);
+  events: TimelineEvent;
 
   constructor(
     private reqService: ReqService,
