@@ -21,5 +21,14 @@ app.use(cors());
 require("./app.js");
 var release = process.argv[2]
 var port = release == 'prod' ? 3000 : 8005;
-console.log(port)
+var logo = `
+  _____  _      _____ _______   ___  
+ |  __ \\| |    |_   _|__   __| |__ \\ 
+ | |__) | |      | |    | |       ) |
+ |  ___/| |      | |    | |      / / 
+ | |    | |____ _| |_   | |     / /_ 
+ |_|    |______|_____|  |_|    |____|
+`
+console.log(logo)
+console.log("Running on port: " + port)
 app.listen(port);
