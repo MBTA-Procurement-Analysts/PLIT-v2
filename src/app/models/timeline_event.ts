@@ -1,7 +1,8 @@
 export class TimelineEvent {
+  ID: string;
   DTTM: Date;
-  Eventype: string;
+  EventType: string;
   Internal: boolean;
   ExternalStatus: string;
-  Lifecycle: string;
+  Lifecycle: string; // 'PO' or 'REQ'
 }
