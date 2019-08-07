@@ -5,6 +5,7 @@ import { ReqService } from '../services/req.service';
 import { PoService } from '../services/po.service';
 import { ActivatedRoute } from '@angular/router';
 import { TimelineEvent } from '../models/timeline_event'
+import { flatMap, concatMap, map } from 'rxjs/operators'
 
 @Component({
   selector: 'app-worklist',
@@ -30,6 +31,7 @@ export class WorklistComponent implements OnInit {
   }
 
   getPoNumsFromReq(req): string[] {
+    console.log(req)
     let result = new Set<string>();
     for (let line of req["lines"]) {
       if (line["PO"]["PO_Number"]) {
@@ -43,31 +45,40 @@ export class WorklistComponent implements OnInit {
   }
   
   getPo(poNum) {
-    console.log(poNum)
     this.poService.getPo(poNum).subscribe(
       po => {
         this.po = po[0];
-        console.log(this.po)
       }
     )
   }
 
   getWorklist() {
     const id = this.route.snapshot.paramMap.get('id');
-    this.reqService.getReq(id).subscribe(
-      req => {
-        this.req = req;
-        this.worklist = req[0].worklist;
-        this.poNums = this.getPoNumsFromReq(req[0])
-        //this.getPo(this.poNum)
-        this.events = this.toTimelineEvents(req[0], this.worklist, this.po);
+    this.reqService.getReq(id).pipe(
+      flatMap(
+        req => {
+          this.req = req;
+          this.worklist = req[0].worklist;
+          var poNums = this.getPoNumsFromReq(req[0])
+          this.poNums = poNums
+          return poNums 
+        }
+      ),
+      flatMap(poNums => this.poService.getPo(poNums)),
+      map(po => {
+        this.po = po[0]
+      })
+    ).subscribe(
+      result => {
+        this.events = this.toTimelineEvents(this.req, this.worklist, this.po);
       }
     )
-    console.log(this.poNums)
+    console.log(this)
   }
 
-  toTimelineEvents(req, worklist, po): TimelineEvent[] {
+  toTimelineEvents(req, reqWorklist, po): TimelineEvent[] {
     var eventsarr = []
+    console.log(req, reqWorklist, po)
     // REQ approval
     eventsarr.push({
       ID: this.req[0].REQ_No,
@@ -77,17 +88,20 @@ export class WorklistComponent implements OnInit {
       ExternalStatus: "internal",
       Lifecycle: "REQ"
     })
-    for (let worklist_event of worklist) {
-      console.log(worklist_event)
+    for (let reqWorklist_event of reqWorklist) {
+      //console.log(reqWorklist_event)
       eventsarr.push({
-        ID: worklist_event.Appr_Inst,
-        DTTM: worklist_event.Date_Time,
-        EventType: worklist_event.Approval_Number + " " + worklist_event.Work_List,
+        ID: reqWorklist_event.Appr_Inst,
+        DTTM: reqWorklist_event.Date_Time,
+        EventType: reqWorklist_event.Approval_Number + " " + reqWorklist_event.Work_List,
         Internal: true,
         ExternalStatus: "internal",
         Lifecycle: "REQ"
       })
     } 
+    for (let poWorklist_event of po.worklist) {
+      console.log(poWorklist_event)
+    }
     console.log(this.po)
     console.log(eventsarr)
     return eventsarr
