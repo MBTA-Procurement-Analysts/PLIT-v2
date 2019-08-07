@@ -43,6 +43,8 @@ require("./server/last-updated/last_updated-sevice-server.js")
 
 require("./server/tags/tag-service-server");
 
+require("./server/timeline/timeline-service-server")
+
 require("./server/cron-list");
 //require("./server/mail/mail.server");
 
