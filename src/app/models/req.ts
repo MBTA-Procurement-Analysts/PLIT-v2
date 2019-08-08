@@ -75,6 +75,9 @@ export class Worklist {
   Denial_Date_Time: Date;
   User: string;
   Unit: string;
+  Date_Time: string;
+  Req_Date: string;
+  Status: string;
   PO_HDR_Status: string;
   WF_APPR_Status: string;
   Dispatch_DTTM: Date;

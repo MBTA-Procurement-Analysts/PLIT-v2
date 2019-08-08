@@ -39,7 +39,8 @@ require("./server/dashboard/dashboard-service-server");
 require("./server/trello/trello.service.server");
 require("./server/contracts/contract-service-server");
 require("./server/contracts/contract-request-service-server");
-require("./server/last-updated/last_updated-sevice-server.js")
+require("./server/last-updated/last_updated-sevice-server.js");
+require("./server/ticket-services/ticket-service-server");
 
 require("./server/tags/tag-service-server");
 

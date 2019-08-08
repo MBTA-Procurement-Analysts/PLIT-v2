@@ -40,14 +40,6 @@ button {
   margin-right: 5px;
 }
 
-.admin-color {
-  background-color: gray;
-}
-
-.user-color {
-  background-color: #add8e6;
-}
-
 .speech-bubble-admin {
   position: relative;
 	background: #d3d3d3;
