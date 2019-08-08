@@ -2,10 +2,10 @@ export class Timeline {
     _id: string;
     PO_No: string;
     REQ_No: string;
-    events: TimelineEvents;
+    events: TimelineEvent;
 }
 
-export class TimelineEvents {
+export class TimelineEvent {
     ID: string;
     Start_DTTM: Date;
     EventType : string;
