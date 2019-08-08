@@ -13,11 +13,11 @@ export class TimelineService {
 
   constructor(private http: HttpClient) { }
 
-  getbyPO(poNum: string): Observable<Timeline> {
-    return this.http.get<Timeline>(this.byPOUrl + poNum);
+  getbyPO(poNum: string, BUnit: string): Observable<Timeline> {
+    return this.http.get<Timeline>(this.byPOUrl + poNum + "/" + BUnit );
   }
 
-  getbyReq(reqNum: string): Observable<Timeline> {
-    return this.http.get<Timeline>(this.byREQUrl + reqNum);
+  getbyReq(reqNum: string, BUnit: string): Observable<Timeline> {
+    return this.http.get<Timeline>(this.byREQUrl + reqNum + "/" + BUnit);
   }
 }

@@ -7,10 +7,10 @@ timelineModel.findByREQ = findByREQ;
 
 module.exports = timelineModel;
 
-function findByPO(poNum){
-    return timelineModel.find({"PO_No": poNum})
+function findByPO(poNum, bunit){
+    return timelineModel.find({"PO_No": poNum, "Business_Unit": bunit})
 }
 
-function findByREQ(reqNum){
-    return timelineModel.find({"REQ_No": reqNum})
+function findByREQ(reqNum, bunit){
+    return timelineModel.find({"REQ_No": reqNum, "Business_Unit": bunit})
 }
