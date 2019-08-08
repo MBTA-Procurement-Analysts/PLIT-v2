@@ -44,6 +44,8 @@ require("./server/ticket-services/ticket-service-server");
 
 require("./server/tags/tag-service-server");
 
+require("./server/timeline/timeline-service-server")
+
 require("./server/cron-list");
 //require("./server/mail/mail.server");
 

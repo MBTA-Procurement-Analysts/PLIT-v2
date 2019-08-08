@@ -19,7 +19,16 @@ app.use(passport.session());
 app.use(cors());
 
 require("./app.js");
+var logo = `
+_____  _      _____ _______   ___  
+|  __ \\| |    |_   _|__   __| |__ \\ 
+| |__) | |      | |    | |       ) |
+|  ___/| |      | |    | |      / / 
+| |    | |____ _| |_   | |     / /_ 
+|_|    |______|_____|  |_|    |____|
+`
 var release = process.argv[2]
 var port = release == 'prod' ? 3000 : 8005;
-console.log(port)
+console.log(logo)
+console.log("Running on " + port)
 app.listen(port);
