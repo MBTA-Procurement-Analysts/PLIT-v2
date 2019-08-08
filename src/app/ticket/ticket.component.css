@@ -1,0 +1,30 @@
+.container {
+  margin-left: 200px;
+}
+
+.ticket-container {
+  padding: 20px;
+  margin-top: 100px;
+  margin-right: 25px;
+  margin-left: 25px;
+  background-color: white;
+  width: calc(100vw - 275px);
+}
+
+.table-container {
+  margin: 25px;
+  height: 600px;
+  overflow: scroll;
+}
+
+table {
+  width: 100%;
+}
+
+mat-expansion-panel {
+  width: calc(100% - 25px) !important;
+}
+
+mat-form-field {
+  margin-right: 10px;
+}

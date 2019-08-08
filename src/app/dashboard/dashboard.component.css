@@ -17,6 +17,14 @@
   overflow: scroll;
 }
 
+::ng-deep .mat-chip-list-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0px !important;
+}
+
 mat-tab-group {
   width: 100%;
 }
@@ -42,19 +50,28 @@ table {
 }
 
 .action-chip {
+  color: white;  
   background-color: green;
 }
 
 .hold-chip {
+  color: white;
   background-color: #F5C438;
 }
 
 .transmission-chip {
+  color: white;
   background-color: red;
 }
 
 .out-chip {
+  color: white;
   background-color: #8b0000;
+}
+
+.systematic-chip {
+  color: white;
+  background-color: black;
 }
 
 .material-icons.md-12 {
@@ -80,6 +97,11 @@ table {
 .material-icons.outColor {
   font-size: 12px;
   color: #8b0000;
+}
+
+.material-icons.systemColor {
+  font-size: 12px;
+  color: black;
 }
 
 .mat-cell.mat-column-flag  {

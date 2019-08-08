@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
 
   displayedColumns: string[] = [
     'color',
-    // 'flag',
+    'flag',
     'Business Unit',
     'Req No',
     'Days Since Creation',
@@ -41,6 +41,7 @@ export class DashboardComponent implements OnInit {
   holdReqs: Dashboard[];
   outToBidReqs: Dashboard[];
   transmissionReqs: Dashboard[];
+  systematicReqs: Dashboard[];
   tempReq: Dashboard;
   tempInfoReq: Req;
   reqsArrayLength: number;
@@ -96,6 +97,7 @@ export class DashboardComponent implements OnInit {
       flatMap(
         reqs => {
           this.allReqs = reqs;
+          console.log(this.allReqs);
           this.allReqs.map(
             req => {
               return this.reqService.getReq(req.REQ_No).subscribe(
@@ -110,15 +112,16 @@ export class DashboardComponent implements OnInit {
                   } else {
                     this.actionReqs.push(req);
                   }
-                  this.dataSource = this.allReqs;
-                  this.tempDataSource = this.allReqs;
-                  this.totalSize = this.allReqs.length;
-                  this.dataSource.paginator = this.paginator;
-                  this.iterator();
+                  this.filterForSystematicFlags(this.allReqs);
                 }
               )
             }
           )
+          this.dataSource = this.allReqs;
+          this.tempDataSource = this.allReqs;
+          this.totalSize = this.allReqs.length;
+          this.dataSource.paginator = this.paginator;
+          this.iterator();
           console.log(this.allReqs);
           return this.allReqs;
         }
@@ -145,6 +148,13 @@ export class DashboardComponent implements OnInit {
 
   changeDataSource(dataSource: MatTabChangeEvent) {
     if (dataSource.index === 0) {
+      for(let i = 0; i < this.allReqs.length; i++) {
+        if(this.allReqs[i].Req_Info.flag === true) {
+          let flagReq = this.allReqs[i];
+          this.allReqs.splice(i, 1);
+          this.allReqs.unshift(flagReq);
+        }
+      }
       this.currentPage = 0;
       this.pageSize = 10;
       this.tempDataSource = this.allReqs;
@@ -152,6 +162,13 @@ export class DashboardComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.iterator();
     } else if (dataSource.index === 1) {
+      for(let i = 0; i < this.actionReqs.length; i++) {
+        if(this.actionReqs[i].Req_Info.flag === true) {
+          let flagReq = this.actionReqs[i];
+          this.actionReqs.splice(i, 1);
+          this.actionReqs.unshift(flagReq);
+        }
+      }
       this.currentPage = 0;
       this.pageSize = 10;
       this.tempDataSource = this.actionReqs;
@@ -159,6 +176,13 @@ export class DashboardComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.iterator();
     } else if (dataSource.index === 2) {
+      for(let i = 0; i < this.holdReqs.length; i++) {
+        if(this.holdReqs[i].Req_Info.flag === true) {
+          let flagReq = this.holdReqs[i];
+          this.holdReqs.splice(i, 1);
+          this.holdReqs.unshift(flagReq);
+        }
+      }
       this.currentPage = 0;
       this.pageSize = 10;
       this.tempDataSource = this.holdReqs;
@@ -166,6 +190,13 @@ export class DashboardComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.iterator();
     } else if (dataSource.index === 3) {
+      for(let i = 0; i < this.transmissionReqs.length; i++) {
+        if(this.transmissionReqs[i].Req_Info.flag === true) {
+          let flagReq = this.transmissionReqs[i];
+          this.transmissionReqs.splice(i, 1);
+          this.transmissionReqs.unshift(flagReq);
+        }
+      }
       this.currentPage = 0;
       this.pageSize = 10;
       this.tempDataSource = this.transmissionReqs;
@@ -173,10 +204,31 @@ export class DashboardComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.iterator();
     } else if (dataSource.index === 4) {
+      for(let i = 0; i < this.outToBidReqs.length; i++) {
+        if(this.outToBidReqs[i].Req_Info.flag === true) {
+          let flagReq = this.outToBidReqs[i];
+          this.outToBidReqs.splice(i, 1);
+          this.outToBidReqs.unshift(flagReq);
+        }
+      }
       this.currentPage = 0;
       this.pageSize = 10;
       this.tempDataSource = this.outToBidReqs;
       this.totalSize = this.outToBidReqs.length;
+      this.dataSource.paginator = this.paginator;
+      this.iterator();
+    } else if(dataSource.index === 5) {
+      for(let i = 0; i < this.systematicReqs.length; i++) {
+        if(this.systematicReqs[i].Req_Info.flag === true) {
+          let flagReq = this.systematicReqs[i];
+          this.systematicReqs.splice(i, 1);
+          this.systematicReqs.unshift(flagReq);
+        }
+      }
+      this.currentPage = 0;
+      this.pageSize = 10;
+      this.tempDataSource = this.systematicReqs;
+      this.totalSize = this.systematicReqs.length;
       this.dataSource.paginator = this.paginator;
       this.iterator();
     }
@@ -187,6 +239,24 @@ export class DashboardComponent implements OnInit {
     const start = this.currentPage * this.pageSize;
     const part = this.tempDataSource.slice(start, end);
     this.dataSource = part;
+  }
+
+  filterForSystematicFlags(dashboard: Dashboard[]) {
+    this.systematicReqs = [];
+    console.log(dashboard[1]);
+    dashboard.forEach( req => {
+      console.log(req.Req_Info.lines);
+      let reqAmount = this.addLines(req.Req_Info.lines);
+      let reqDate = this.getDateDifference(req.Req_Info.REQ_Date);
+      if(reqAmount < 50000 && reqDate > 2 && req.Out_To_Bid === 'N' && req.Hold_From_Further_Processing === 'N') {
+        this.systematicReqs.push(req);
+      } else if(reqAmount > 50000 && reqDate > 7 && req.Out_To_Bid === 'N' && req.Hold_From_Further_Processing === 'N') {
+        this.systematicReqs.push(req);
+      } else if(reqAmount < 50000 && reqDate > 30 && req.Hold_From_Further_Processing === 'Y') {
+        this.systematicReqs.push(req);
+      }
+    })
+    console.log(this.systematicReqs);
   }
 
   addLines(lines: Lines) {
@@ -216,7 +286,6 @@ export class DashboardComponent implements OnInit {
        this.tempDataSource = list.filter(
         req => req.Business_Unit === 'MBTAC'
       )
-      // console.log(list.length);
       this.totalSize = this.tempDataSource.length;
       this.currentPage = 0;
       this.iterator();
@@ -308,7 +377,7 @@ export class DashboardComponent implements OnInit {
         }
         counter++;
       })
-    } else {
+    } else if(req.Req_Info.flag === true) {
       let counter = 0;
       this.tempDataSource.forEach((reqInArray: Dashboard) => {
         if(req.Req_ID === reqInArray.Req_ID) {

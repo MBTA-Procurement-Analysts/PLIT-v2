@@ -8,11 +8,21 @@
   margin-right: 25px;
   margin-left: 25px;
   background-color: white;
+  width: calc(100vw - 275px);
 }
 
 .table-container {
   margin: 25px;
-  height: 600px;
+  height: 500px;
+  overflow: scroll;
+}
+
+::ng-deep .mat-chip-list-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0px !important;
 }
 
 mat-tab-group {
@@ -24,9 +34,19 @@ mat-chip {
     box-shadow: none !important;
 }
 
+.mat-display-1 {
+  margin-top: 5px;
+}
+
 table {
-  overflow: scroll;
   width: 100%;
+}
+.mat-standard-chip {
+  min-height: 24px;
+}
+
+.mat-chip {
+  font-size: 12px;
 }
 
 .action-chip {
@@ -34,9 +54,42 @@ table {
 }
 
 .hold-chip {
-  background-color: yellow;
+  background-color: #F5C438;
 }
 
 .transmission-chip {
   background-color: red;
+}
+
+.out-chip {
+  background-color: #8b0000;
+}
+
+.material-icons.md-12 {
+  font-size: 12px;
+}
+
+.material-icons.actionColor {
+
+  font-size: 12px;
+  color: green;
+}
+
+.material-icons.holdColor {
+  font-size: 12px;
+  color: #F5C438;
+}
+
+.material-icons.transmissionColor {
+  font-size: 12px;
+  color: red;
+}
+
+.material-icons.outColor {
+  font-size: 12px;
+  color: #8b0000;
+}
+
+.mat-cell.mat-column-flag  {
+  padding-top: 5px !important;
 }

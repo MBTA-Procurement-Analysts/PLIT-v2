@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="ticket-container">
+    <div class="mat-display-1">
+      Tickets
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Add Ticket
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ panelOpenState ? '' : 'click here to add ticket information' }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
+          <mat-form-field>
+            <input matInput placeholder="Description" class="validate" formControlName="Description">
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-select placeholder="Priority" class="validate" formControlName="Priority" [value]="priority.value">
+              <mat-option value="Low">Low</mat-option>
+              <mat-option value="Normal">Normal</mat-option>
+              <mat-option value="High">High</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker3" placeholder="Requested Completion Date" [value]="dateNeeded.value" formControlName="Date_Needed">
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit">Add Ticket</button>
+
+          </form>
+
+      </mat-expansion-panel>
+      </mat-accordion>
+
+      <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation">
+
+        <ng-container matColumnDef="Ticket Number">
+          <th mat-header-cell *matHeaderCellDef> Ticket Number </th>
+          <td mat-cell *matCellDef="let ticket">
+            {{ ticket.Ticket_ID }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let ticket">
+            {{ ticket.Description }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Requester">
+          <th mat-header-cell *matHeaderCellDef> Requester </th>
+          <td mat-cell *matCellDef="let ticket">
+            {{ ticket.Requester }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Priority">
+          <th mat-header-cell *matHeaderCellDef> Priority </th>
+          <td mat-cell *matCellDef="let ticket">
+            {{ ticket.Priority }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Date Needed">
+          <th mat-header-cell *matHeaderCellDef> Date Needed </th>
+          <td mat-cell *matCellDef="let ticket">
+            {{ ticket.Date_Needed | date:'longDate' }}
+          </td>
+        </ng-container>
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+    </div>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 100]" [showFirstLastButtons]="true" [length]="tickets?.length"
+    [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+  </mat-paginator>
+  </div>
+</div>
