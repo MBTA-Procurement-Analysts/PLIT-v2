@@ -4,6 +4,7 @@ export class Timeline {
     REQ_No: string;
     Business_Unit: string;
     Complicated: string;
+    Footnote: string;
     events: TimelineEvent[];
 }
 
@@ -15,6 +16,7 @@ export class TimelineEvent {
     Person: string;
     Internal : boolean;
     Neutral : boolean;
+    Auto: boolean;
     Lifecycle : string;
     End_DTTM : Date;
 }
