@@ -12,14 +12,11 @@ import { Timeline, TimelineEvent} from '../models/timeline';
 })
 export class WorklistComponent implements OnInit {
   req: Req;
-  worklist: Worklist;
-  tomorrow = new Date(2017, 9, 20, 14,34);
   timeline: Timeline;
 
   constructor(
-    private reqService: ReqService,
     private route: ActivatedRoute,
-    private timelineService: TimelineService,
+    private timelineService: TimelineService
   ) { }
 
   ngOnInit() {
@@ -34,13 +31,5 @@ export class WorklistComponent implements OnInit {
         console.log(this.timeline);
       }
     )
-    // this.reqService.getReq(id).subscribe(
-    //   req => {
-    //     this.req = req;
-    //     this.worklist = req[0].worklist;
-    //     console.log(this.worklist);
-    //   }
-    // )
   }
-
 }

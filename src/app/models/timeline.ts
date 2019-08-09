@@ -3,7 +3,7 @@ export class Timeline {
     PO_No: string;
     REQ_No: string;
     Business_Unit: string;
-    events: TimelineEvent;
+    events: TimelineEvent[];
 }
 
 export class TimelineEvent {

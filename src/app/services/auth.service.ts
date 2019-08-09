@@ -68,6 +68,14 @@ export class AuthService {
     return false;
   }
 
+  public isLoggedIn() {
+    if(this.initialUser.username !== "") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public isAdmin(){
     if(this.currentUserRole === 'Admin') {
       return true;
