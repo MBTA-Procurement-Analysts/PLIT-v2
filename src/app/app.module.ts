@@ -19,7 +19,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
-import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 
 import { AuthService } from './services/auth.service'
 import { AuthGuard } from './auth.guard';
@@ -83,8 +82,7 @@ import { TicketComponent } from './ticket/ticket.component';
     MatExpansionModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatRippleModule,
-    Ng2GoogleChartsModule
+    MatRippleModule
   ],
   exports: [
     MatPaginatorModule

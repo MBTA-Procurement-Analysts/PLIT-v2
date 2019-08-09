@@ -2,7 +2,7 @@ export class Timeline {
     _id: string;
     PO_No: string;
     REQ_No: string;
-    events: TimelineEvent;
+    events: TimelineEvent[];
 }
 
 export class TimelineEvent {

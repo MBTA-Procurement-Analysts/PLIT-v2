@@ -78,7 +78,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let all">
-                 <a routerLink="{{all.REQ_No}}">
+                 <a routerLink="{{all.REQ_No}}/{{all.Business_Unit}}">
                    {{all.REQ_No}}
                  </a>
                </td>
@@ -217,7 +217,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let action">
-                 <a routerLink="{{action.REQ_No}}">
+                 <a routerLink="{{action.REQ_No}}/{{action.Business_Unit}}">
                    {{action.REQ_No}}
                  </a>
                </td>
@@ -356,7 +356,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let hold">
-                 <a routerLink="{{hold.REQ_No}}">
+                 <a routerLink="{{hold.REQ_No}}/{{hold.Business_Unit}}">
                    {{hold.REQ_No}}
                  </a>
                </td>
@@ -495,7 +495,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let transmission">
-                 <a routerLink="{{transmission.REQ_No}}">
+                 <a routerLink="{{transmission.REQ_No}}/{{transmission.Business_Unit}}">
                    {{transmission.REQ_No}}
                  </a>
                </td>
@@ -634,7 +634,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let out">
-                 <a routerLink="{{out.REQ_No}}">
+                 <a routerLink="{{out.REQ_No}}/{{out.Business_Unit}}">
                    {{out.REQ_No}}
                  </a>
                </td>
@@ -773,7 +773,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let system">
-                 <a routerLink="{{system.REQ_No}}">
+                 <a routerLink="{{system.REQ_No}}/{{system.Business_Unit}}">
                    {{system.REQ_No}}
                  </a>
                </td>

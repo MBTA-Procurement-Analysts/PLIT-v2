@@ -23,10 +23,10 @@ const appRoutes: Routes = [
   { path: 'self-service', redirectTo: 'self-service/bids', pathMatch: 'full', canActivate: [RoleGuard] },
   { path: 'self-service/bids', component: BidComponent, canActivate: [RoleGuard] },
   { path: 'self-service/ticket', component: TicketComponent, canActivate: [RoleGuard] },
-  { path: 'dashboard/reqs/:id', component: ReqDetailsComponent, canActivate: [RoleGuard] },
+  { path: 'dashboard/reqs/:id/:unit', component: ReqDetailsComponent, canActivate: [RoleGuard] },
   { path: 'self-service/bids/:id', component: BidDetailsComponent, canActivate: [RoleGuard] },
   { path: 'dashboard/pos/:id', component: PoDetailsComponent, canActivate: [RoleGuard] },
-  { path: 'dashboard/reqs/:id/worklist', component: WorklistComponent, canActivate: [RoleGuard] },
+  { path: 'dashboard/reqs/:id/:unit/worklist', component: WorklistComponent },
   { path: 'dashboard/admin', component: ReqComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
 ];
