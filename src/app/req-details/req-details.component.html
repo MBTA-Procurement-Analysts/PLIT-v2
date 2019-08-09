@@ -1,7 +1,7 @@
 <div class="container" *ngIf="req?.REQ_No" >
   <div class="req-container">
     <div class="row">
-      <div class="col-8 req-detail-container">
+      <div class="col-9 req-detail-container">
         <div class="mat-headline">
           Requisition #{{req.REQ_No}} Details
           <button *ngIf="req.worklist"  mat-raised-button color="accent" class="float-right" routerLink="worklist">Req Worklist</button>
@@ -87,9 +87,11 @@
             </tr>
           </tbody>
         </table>
+
+        <app-worklist></app-worklist>
       </div>
 
-      <div class="col-4 d-none d-lg-block">
+      <div class="col-3 d-none d-lg-block">
         <div class="mat-headline text-center">
           Notes
         </div>

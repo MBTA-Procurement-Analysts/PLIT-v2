@@ -12,6 +12,9 @@
     <a [routerLink]="['dashboard/reqs']" routerLinkActive="active-link-sidenav">
       Req List
     </a>
+    <a *ngIf="initialUser.role === 'Admin'" [routerLink]="['dashboard/admin']" routerLinkActive="active-link-sidenav">
+      Req List (All Users)
+    </a>
     <a [routerLink]="['dashboard/pos']" routerLinkActive="active-link-sidenav">
       Pending POs
     </a>
@@ -20,6 +23,9 @@
   <div *ngIf="router.isActive('self-service')">
     <a [routerLink]="['self-service/bids']" routerLinkActive="active-link-sidenav">
       Bid Log
+    </a>
+    <a [routerLink]="['self-service/ticket']" routerLinkActive="active-link-sidenav">
+      Tickets
     </a>
   </div>
 </div>

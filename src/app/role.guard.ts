@@ -6,14 +6,14 @@ import { Router } from '@angular/router'
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class RoleGuard implements CanActivate  {
   constructor(
     private authService: AuthService,
     private router: Router
   ){}
   canActivate() {
-      if(this.authService.isAdmin()) {
-        return true
+      if(this.authService.isLoggedIn()) {
+        return true;
       } else {
         this.router.navigate(['login']);
         return false;
