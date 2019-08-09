@@ -4,7 +4,7 @@ export class Timeline {
     REQ_No: string;
     Business_Unit: string;
     Complicated: string;
-    events: TimelineEvent;
+    events: TimelineEvent[];
 }
 
 export class TimelineEvent {
