@@ -3,9 +3,11 @@ var timelineSchema = new mongoose.Schema({
     "Req_No": String,
     "PO_No": String,
     "Business_Unit": String,
+    "Complicated": String,
     "events": [{
         "ID": String,
         "Start_DTTM": Date,
+        "EventType": String,
         "Text": String,
         "Person": String,
         "Internal": Boolean,

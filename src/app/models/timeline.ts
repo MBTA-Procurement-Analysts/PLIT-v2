@@ -3,6 +3,7 @@ export class Timeline {
     PO_No: string;
     REQ_No: string;
     Business_Unit: string;
+    Complicated: string;
     events: TimelineEvent;
 }
 
