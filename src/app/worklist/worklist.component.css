@@ -10,3 +10,7 @@
   background-color: white;
   width: calc(100vw - 275px);
 }
+
+#timeline {
+  overflow: scroll;
+}
