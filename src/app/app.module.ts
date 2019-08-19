@@ -40,6 +40,7 @@ import { SearchPipe } from './pipes/search.pipe';
 import { PoDetailsComponent } from './po-details/po-details.component';
 import { WorklistComponent } from './worklist/worklist.component';
 import { TicketComponent } from './ticket/ticket.component';
+import { ReqPrintingComponent } from './req-printing/req-printing.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { TicketComponent } from './ticket/ticket.component';
     SearchPipe,
     PoDetailsComponent,
     WorklistComponent,
-    TicketComponent
+    TicketComponent,
+    ReqPrintingComponent
   ],
   imports: [
     BrowserModule,
