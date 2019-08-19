@@ -4,20 +4,12 @@ var mongoose = require('mongoose');
 // var connectionString = 'mongodb://localhost/dev';
 // release is either 'prod' or 'dev', based on the argument passed to npm during project init
 var release = process.argv[2]
-var connectionString = "mongodb://localhost/rubix-" + "local" + "-" + release
-console.log(connectionString)
-console.log(process.argv)
-if (process.env.MLAB_USERNAME_WEBDEV) {
-    console.log("on heroku!");
-    connectionString = process.env.MLAB_USERNAME_WEBDEV + ":" +
-        process.env.MLAB_PASSWORD_WEBDEV + "@ds135444.mlab.com:35444/heroku_829kjs4t"
-}
+var mongousername = process.env["RUBIXMONGOUSERNAME"]
+var mongopassword = process.env["RUBIXMONGOPASSWORD"]
 
-if (process.env.MLAB_USERNAME) { // check if running remotely
-    connectionString = process.env.MLAB_USERNAME_WEBDEV + ":" +
-        process.env.MLAB_PASSWORD_WEBDEV + "@ds135444.mlab.com:35444/heroku_829kjs4t"
-}
-console.log("connecting with: " + connectionString);
+var connectionString = "mongodb://" + mongousername + ":" + mongopassword + "@localhost/rubix-" + "local" + "-" + release + "?authSource=admin"
+console.log(connectionString, {useNewUrlParser: true})
+console.log(process.argv)
 
 mongoose.connect(connectionString);
 mongoose.Promise = require('q').Promise;

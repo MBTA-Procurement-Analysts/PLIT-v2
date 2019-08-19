@@ -1,7 +1,6 @@
 // var request = require('request');
 // var fs = require('fs');
-// var apiKey = "7075fa8fcd15a2f950df1755f0850222";
-// var token = "efe8e903ccef36b80f277483bd76dfa30817ef232a93134db04b47efec4d6faa";
+
 // var jsonToBeParsed = {};
 // var masterList = [];
 // var memberList = [];
