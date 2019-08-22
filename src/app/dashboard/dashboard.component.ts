@@ -102,7 +102,7 @@ export class DashboardComponent implements OnInit {
             req => {
               return this.reqService.getReq(req.REQ_No).subscribe(
                 reqInfo => {
-                  req.Req_Info = reqInfo[0]
+                  req.Req_Info = reqInfo[0];
                   if(req.Transmitted === 'Y') {
                     this.transmissionReqs.push(req);
                   } else if(req.Hold_From_Further_Processing === 'Y') {
@@ -112,16 +112,24 @@ export class DashboardComponent implements OnInit {
                   } else {
                     this.actionReqs.push(req);
                   }
-                  this.filterForSystematicFlags(this.allReqs);
+                  for(let i = 0; i < this.allReqs.length; i++) {
+                    if(this.allReqs[i].Req_Info.flag === true) {
+                      console.log("hit");
+                      let flagReq = this.allReqs[i];
+                      this.allReqs.splice(i, 1);
+                      this.allReqs.unshift(flagReq);
+                    }
+                  }
+                  this.dataSource = this.allReqs;
+                  this.tempDataSource = this.allReqs;
+                  this.totalSize = this.allReqs.length;
+                  this.dataSource.paginator = this.paginator;
+                  this.iterator();
+                  // this.filterForSystematicFlags(this.allReqs);
                 }
               )
             }
           )
-          this.dataSource = this.allReqs;
-          this.tempDataSource = this.allReqs;
-          this.totalSize = this.allReqs.length;
-          this.dataSource.paginator = this.paginator;
-          this.iterator();
           console.log(this.allReqs);
           return this.allReqs;
         }
@@ -364,6 +372,7 @@ export class DashboardComponent implements OnInit {
 
 //NOT FUCNTIONING CORRECTLY
   changeFlag(req: Dashboard) {
+    this.searchPageSize();
     console.log(req.Req_ID);
     if(req.Req_Info.flag === null || req.Req_Info.flag === false) {
       let counter = 0;
