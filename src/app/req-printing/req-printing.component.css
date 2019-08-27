@@ -10,3 +10,11 @@
     background-color: white;
     width: calc(100vw - 275px);
 }
+
+.table-container {
+    margin: 5px;
+}
+
+.req-form {
+    margin-bottom: 25px
+}

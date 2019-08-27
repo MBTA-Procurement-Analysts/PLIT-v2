@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit {
       flatMap(
         reqs => {
           this.allReqs = reqs;
-          console.log(this.allReqs);
+          //console.log(this.allReqs);
           this.allReqs.map(
             req => {
               return this.reqService.getReq(req.REQ_No).subscribe(
@@ -122,7 +122,7 @@ export class DashboardComponent implements OnInit {
           this.totalSize = this.allReqs.length;
           this.dataSource.paginator = this.paginator;
           this.iterator();
-          console.log(this.allReqs);
+          //console.log(this.allReqs);
           return this.allReqs;
         }
       )
@@ -243,9 +243,9 @@ export class DashboardComponent implements OnInit {
 
   filterForSystematicFlags(dashboard: Dashboard[]) {
     this.systematicReqs = [];
-    console.log(dashboard[1]);
+    //console.log(dashboard[1]);
     dashboard.forEach( req => {
-      console.log(req.Req_Info.lines);
+      //console.log(req.Req_Info.lines);
       let reqAmount = this.addLines(req.Req_Info.lines);
       let reqDate = this.getDateDifference(req.Req_Info.REQ_Date);
       if(reqAmount < 50000 && reqDate > 2 && req.Out_To_Bid === 'N' && req.Hold_From_Further_Processing === 'N') {
@@ -256,7 +256,7 @@ export class DashboardComponent implements OnInit {
         this.systematicReqs.push(req);
       }
     })
-    console.log(this.systematicReqs);
+    //console.log(this.systematicReqs);
   }
 
   addLines(lines: Lines) {
@@ -364,7 +364,7 @@ export class DashboardComponent implements OnInit {
 
 //NOT FUCNTIONING CORRECTLY
   changeFlag(req: Dashboard) {
-    console.log(req.Req_ID);
+    //console.log(req.Req_ID);
     if(req.Req_Info.flag === null || req.Req_Info.flag === false) {
       let counter = 0;
       this.tempDataSource.forEach((reqInArray: Dashboard) => {
@@ -372,7 +372,7 @@ export class DashboardComponent implements OnInit {
           this.addReqFlag(req.Req_ID);
           this.tempDataSource.splice(counter, 1);
           this.tempDataSource.unshift(reqInArray);
-          console.log(this.tempDataSource);
+          //console.log(this.tempDataSource);
           this.iterator();
         }
         counter++;
@@ -384,7 +384,7 @@ export class DashboardComponent implements OnInit {
           this.removeReqFlag(req.Req_ID);
           this.tempDataSource.splice(counter, 1);
           this.tempDataSource.push(reqInArray);
-          console.log(this.tempDataSource);
+          //console.log(this.tempDataSource);
           this.iterator();
         }
         counter++;

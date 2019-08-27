@@ -7,7 +7,7 @@
   <span><a class="material-icons logout black-text" [routerLink]="['login']">exit_to_app</a></span>
 </mat-toolbar>
 
-<div class="sidenav mat-elevation-z3">
+<div class="sidenav mat-elevation-z3 no-print">
   <div *ngIf="router.isActive('dashboard')">
     <a [routerLink]="['dashboard/reqs']" routerLinkActive="active-link-sidenav">
       Req List

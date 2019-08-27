@@ -3,5 +3,67 @@
         <div class="mat-headline">
             Req Bulk Printing
         </div>
+        <div class="req-form">
+            <form [formGroup]="reqPrintingForm" (ngSubmit)="onSubmit()">
+                <div class="row align-items-center">
+                    <div class="col-4 d-flex justify-content-between">
+                        <mat-form-field appearance="fill" class="mx-1">
+                            <mat-label>Buyer Name</mat-label>
+                            <input matInput placeholder="{{ currentUser.username }}" formControlName="userName">
+                            <mat-icon matSuffix>edit</mat-icon>
+                            <mat-hint>Use *INV for inventory buyers.</mat-hint>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="mx-1">
+                            <mat-label>Date</mat-label>
+                            <input matInput [matDatepicker]="reqPrintDate" [formControl]="date">
+                            <mat-datepicker-toggle matSuffix [for]="reqPrintDate"></mat-datepicker-toggle>
+                            <mat-datepicker #reqPrintDate></mat-datepicker>
+                            <mat-hint>Click Calendar to pick date.</mat-hint>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-7 offset-1 d-flex justify-content-around">
+                        <button mat-raised-button color="accent" type="button" (click)="showUserReqs()"><i
+                                class="material-icons">person</i>My REQs Today</button>
+                        <button mat-raised-button color="accent" type="button" (click)="showINVReqs()"><i
+                                class="material-icons">people</i>*INV REQs Today</button>
+                        <button mat-raised-button color="primary" type="submit"><i class="material-icons">search</i>Show
+                            REQs</button>
+                        <button mat-raised-button color="primary" type="button" (click)="openPrint()"><i
+                                class="material-icons">print</i>Print</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div class="table-container">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">1</th>
+                        <th scope="col">2</th>
+                        <th scope="col">3</th>
+                        <th scope="col">4</th>
+                        <th scope="col">5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let req of reqs">
+                        <td>{{ req.REQ_No }}</td>
+                        <td>{{ req.Buyer }}</td>
+                        <td>{{ req.Currency }}</td>
+                        <td>{{ req.Origin }}</td>
+                        <td>{{ req.Account }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
+    <!-- <div>
+        <ul>
+            <li *ngFor="let req of reqs">{req.REQ_No}</li>
+        </ul>
+    </div> -->
 </div>

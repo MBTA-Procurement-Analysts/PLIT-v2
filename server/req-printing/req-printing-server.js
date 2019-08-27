@@ -82,14 +82,10 @@ function getItemObj(req) {
                 return witm
             }))
     }
-    itemsArr = Promise.all(itemPromiseArr).then(function(vs) {
-        var arr = []
-        for (v of vs) {
-            arr.push(v)
-        }
-        return arr})
-    return itemsArr
-    console.log(itemsArr)
+    // itemsArr = Promise.all(itemPromiseArr).then(function(vs) {
+    //     return vs})
+    // console.log(itemsArr)
+    // return itemsArr
     return Promise.all(itemPromiseArr).then(function (items) {
         var itemsobj = {}
         for (value of items) {
@@ -100,7 +96,7 @@ function getItemObj(req) {
 }
 
 // REQUEST, not REQUISITION
-function getPrintingObject(req, res) {
+async function getPrintingObject(req, res) {
     const invBuyers = ["AKNOBEL", "DMARTINOS", "KLOVE", "NSEQUEA", "PHONG", "TSULLIVAN1"]
     var buyerName = req.params.buyer;
     var date = req.params.date;
@@ -115,15 +111,15 @@ function getPrintingObject(req, res) {
                 var wreq = wrangleReq(req)
                 var witem = getItemObj(wreq)
                 console.log(witem)
-                reqArr.push({ "entryreq": wreq, "entryitemm": witem })
+                reqArr.push({ "entryreq": wreq, "entryitem": witem })
             }
             return reqArr
         })
         .then(function (values) {
-            //console.log(values)
-            // for (entry of values) {
-            //     entry['entryitem'] = getItemObj(entry['entryreq']).then(function (v) { return v })
-            // }
+            //  for (entry of values) {
+            //      entry['entryitem'] = getItemObj(entry['entryreq']).then(function (v) { return v })
+            //  }
+            console.log(values)
             res.json(values)
         })
 
