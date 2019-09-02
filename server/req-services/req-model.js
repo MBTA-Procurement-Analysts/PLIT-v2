@@ -68,13 +68,14 @@ function getReqsWithItemsForDate(date) {
     utcDate.setTime(utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000);
     return reqModel.aggregate([
         {$match: {$and: [{"Approved_On":utcDate}, 
-                         {"Business_Unit": "MBTAI"}]}},
+                         {"Business_Unit": "MBTAI"},
+                         {"Requester": {$regex: /^INVCYCC[24]/}}]}},
         {$lookup: {
         from: "ITEM_DATA",
         localField: "lines.Item",
         foreignField: "Item_No",
-        as: "Item_Data"
-        }}])
+        as: "Item_Data"}},
+        {$addFields: {"Sum_Amount": {$sum: "$lines.Line_Total"}}}])
 }
 
 function getReqsWithItemsForBuyer(buyer, date) {
@@ -84,11 +85,12 @@ function getReqsWithItemsForBuyer(buyer, date) {
     return reqModel.aggregate([
         {$match: {$and: [{"Approved_On":utcDate}, 
                          {"Business_Unit": "MBTAI"}, 
-                         {"Buyer": buyer}]}},
+                         {"Buyer": buyer},
+                         {"Requester": {$regex: /^INVCYCC[24]/}}]}},
         {$lookup: {
         from: "ITEM_DATA",
         localField: "lines.Item",
         foreignField: "Item_No",
-        as: "Item_Data"
-        }}])
+        as: "Item_Data"}},
+        {$addFields: {"Sum_Amount": {$sum: "$lines.Line_Total"}}}])
 }

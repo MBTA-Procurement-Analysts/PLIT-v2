@@ -41,6 +41,9 @@ import { PoDetailsComponent } from './po-details/po-details.component';
 import { WorklistComponent } from './worklist/worklist.component';
 import { TicketComponent } from './ticket/ticket.component';
 import { ReqPrintingComponent } from './req-printing/req-printing.component';
+import { ReqstatusPipe } from './pipes/reqstatus.pipe';
+import { ItemstatusPipe } from './pipes/itemstatus.pipe';
+import { ItempofilterPipe } from './pipes/itempofilter.pipe';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,10 @@ import { ReqPrintingComponent } from './req-printing/req-printing.component';
     PoDetailsComponent,
     WorklistComponent,
     TicketComponent,
-    ReqPrintingComponent
+    ReqPrintingComponent,
+    ReqstatusPipe,
+    ItemstatusPipe,
+    ItempofilterPipe
   ],
   imports: [
     BrowserModule,

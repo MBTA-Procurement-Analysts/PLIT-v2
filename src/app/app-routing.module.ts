@@ -29,7 +29,8 @@ const appRoutes: Routes = [
   { path: 'dashboard/pos/:id', component: PoDetailsComponent, canActivate: [RoleGuard] },
   { path: 'dashboard/reqs/:id/:unit/worklist', component: WorklistComponent },
   { path: 'dashboard/admin', component: ReqComponent, canActivate: [AuthGuard] },
-  { path: 'self-service/req-printing', component: ReqPrintingComponent, canActivate: [AuthGuard] },
+  //{ path: 'self-service/req-printing', component: ReqPrintingComponent, canActivate: [AuthGuard] },
+  { path: 'self-service/req-printing', component: ReqPrintingComponent },
   { path: 'login', component: LoginComponent },
 ];
 

@@ -37,33 +37,267 @@
         </div>
 
         <mat-divider></mat-divider>
-        <div class="table-container">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">1</th>
-                        <th scope="col">2</th>
-                        <th scope="col">3</th>
-                        <th scope="col">4</th>
-                        <th scope="col">5</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let req of reqs">
-                        <td>{{ req.REQ_No }}</td>
-                        <td>{{ req.Buyer }}</td>
-                        <td>{{ req.Currency }}</td>
-                        <td>{{ req.Origin }}</td>
-                        <td>{{ req.Account }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <div class="table-container border p-1 mb-5" *ngFor="let req of reqs">
+            <ng-container *ngIf="validRequester(req['Requester'])">
+                <div class="row justify-content-between">
+                    <div class="col-4">
+                        <h5 class="text-center">Req: {{req['REQ_No']}}</h5>
+                    </div>
+                    <div class="col-4">
+                        <div *ngFor='let item of req.Item_Data'>
+                            <h5 class="text-center">Item: {{item['Item_No']}}</h5>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <h5 class="text-center">Buyer: {{req['Buyer']}}</h5>
+                    </div>
+                </div>
+                <div class="row justify-content-between">
+                    <div class="col-4">
+                        <table class="tbl-padding float-left">
+                            <tbody>
+                                <tr>
+                                    <td><b>{{req['Business_Unit']}}</b></td>
+                                    <td><b>{{req['Status'] | reqstatus}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Page Displayed:</b></td>
+                                    <td>{{"CHANGE ME"}}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Data Refreshed:</b></td>
+                                    <td>{{"CHANGE ME"}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
+                    <div class="col-8">
+                        <div class="table-responsive">
+                            <table class="tbl-padding table my-0">
+                                <tbody>
+                                    <tr class="border-top">
+                                        <td><b>Date</b></td>
+
+                                        <td><b>Requester</b></td>
+                                        <td><b>Currency</b></td>
+
+                                        <td><b>Fund</b></td>
+                                        <td><b>Account</b></td>
+                                        <td><b>Dept</b></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>{{req['REQ_Date'] | date: 'shortDate' : 'UTC'}}</td>
+                                        <td>{{req['Requester']}}</td>
+                                        <td>{{req['Currency']}}</td>
+                                        <td>{{req['Fund']}}</td>
+                                        <td><code>{{req['Account']}}</code></td>
+                                        <td><code>{{req['Department']['Number']}}</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-left">
+                            <b>Ship To {{req['Ship_To']['Description']}} </b>:<br> {{req['Ship_To']['Address_1']}},
+                            {{req['Ship_To']['Address_2']}}; {{req['Ship_To']['City']}}, {{req['Ship_To']['State']}}
+                            0{{req['Ship_To']['Zip_Code']}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-0">
+                    <div class="col-12">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Ln/Schd</th>
+                                    <th>Item</th>
+                                    <th>Description</th>
+                                    <th>Mfg ID</th>
+                                    <th>Quantity</th>
+                                    <th>UOM</th>
+                                    <th>Price</th>
+                                    <th>Ext. Amt</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let reqln of req['lines']">
+                                    <td>{{reqln.Line_No}} - {{reqln.Schedule_No}}</td>
+                                    <td>{{reqln.Item}}</td>
+                                    <td>{{reqln.More_Info.substring(0, 28)}}</td>
+                                    <td>{{reqln.MFG_ID}}</td>
+                                    <td class="text-right">{{reqln.Quantity}}</td>
+                                    <td>{{reqln.UOM}}</td>
+                                    <td class="text-right">{{reqln.Unit_Price | currency}}</td>
+                                    <td class="text-right">{{reqln.Line_Total| currency}}</td>
+                                    <td>{{reqln.Due_Date | date: 'MM/dd/yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row my-0">
+                    <div class="col-6">
+                        <b>
+                            Total Requisition Amount: <code>{{req['Sum_Amount'] | currency}}</code>
+                        </b>
+                    </div>
+                </div>
+                <div class="accordion" id="accordionExample">
+
+                </div>
+                <div class="mt-1">
+                    <mat-accordion multi="true">
+                        <mat-expansion-panel *ngFor="let item of req.Item_Data">
+                            <mat-expansion-panel-header>
+                                <u>
+                                    {{item.Item_No}}: {{item.Item_Description}}
+                                </u>
+                            </mat-expansion-panel-header>
+                            <div class="item-card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <b>Item Status:</b> {{item.Status | itemstatus }}<br>
+                                        <b>Item Group:</b> {{item.Item_Group.Group_Number}}:
+                                        {{item.Item_Group.Group_Description}}<br>
+                                        <b>UOM:</b> {{item.UOM}}<br>
+                                        <b>Added:</b> {{item.Status_Date | date: 'medium'}}<br>
+                                        <b>Data Last Refresh:</b> CHANGE ME <br>
+                                        <b>Total Backorder:</b> {{item.Total_Backorder}}<br>
+                                        <hr>
+                                        <b>Viable Substitute</b>
+                                        <table class="tbl-padding table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Manufacturer ID</th>
+                                                    <th>Manufacturer Item ID</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let mfgitem of item.Viable_Subs">
+                                                    <td>{{mfgitem.Mfg_ID}}</td>
+                                                    <td><code>{{mfgitem.Mfg_Item_ID}}</code></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-6">
+                                        <b>Item Storage Area</b>
+                                        <table class="tbl-padding table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Business Unit</th>
+                                                    <th>Area</th>
+                                                    <th>Lv 1</th>
+                                                    <th>Lv 2</th>
+                                                    <th>Lv 3</th>
+                                                    <th>Lv 4</th>
+                                                    <th>Quantity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let itemloc of item.Locations">
+                                                    <td>{{itemloc.Unit}}</td>
+                                                    <td>{{itemloc.Area}}</td>
+                                                    <td>{{itemloc.Level_1}}</td>
+                                                    <td>{{itemloc.Level_2}}</td>
+                                                    <td>{{itemloc.Level_3}}</td>
+                                                    <td>{{itemloc.level_4}}</td>
+                                                    <td align="right">{{itemloc.Qty}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <b>Warehouse Information</b>
+                                        <table class="tbl-padding table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Unit</th>
+                                                    <th>Stat. Current</th>
+                                                    <th>Util Type</th>
+                                                    <th>Qty On Hand</th>
+                                                    <th>Qty Avail.</th>
+                                                    <th>Reorder Pt</th>
+                                                    <th>Max Qty</th>
+                                                    <th>Last Mo Dmand</th>
+                                                    <th>Last Qt Dmand</th>
+                                                    <th>Last Anu. Dmand</th>
+                                                    <th>Last Price Paid</th>
+                                                    <th>Last Putaway</th>
+                                                    <th>No Repl. Flag</th>
+                                                    <th>Repl. Class</th>
+                                                    <th>Cost Element</th>
+                                                    <th>Repl. Lead</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let whouseInfo of item.Warehouse_Information">
+                                                    <td>{{whouseInfo.Unit}}</td>
+                                                    <td>{{whouseInfo.Status_Current}}</td>
+                                                    <td>{{whouseInfo.Util_Type}}</td>
+                                                    <td>{{whouseInfo.Qty_On_Hand}}</td>
+                                                    <td>{{whouseInfo.Qty_Available}}</td>
+                                                    <td>{{whouseInfo.Reorder_Point}}</td>
+                                                    <td>{{whouseInfo.Max_Qty}}</td>
+                                                    <td>{{whouseInfo.Last_Month_Demand}}</td>
+                                                    <td>{{whouseInfo.Last_Quarter_Demand}}</td>
+                                                    <td>{{whouseInfo.Last_Annual_Demand}}</td>
+                                                    <td>{{whouseInfo.Avg_Price | currency}}</td>
+                                                    <td>{{whouseInfo.Last_Putaway | date:'shortDate'}}</td>
+                                                    <td>{{whouseInfo.No_Replenish}}</td>
+                                                    <td>{{whouseInfo.Replenish_Class}}</td>
+                                                    <td>{{whouseInfo.Cost_Element}}</td>
+                                                    <td>{{whouseInfo.Replenish_Lead}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <b>Historical POs</b>
+                                        <table class="tbl-padding table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>PO No.</th>
+                                                    <th>Name</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th class="no-print">Dist. Status</th>
+                                                    <th class="no-print">Receipt Status</th>
+                                                    <th>Qty</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Received</th>
+                                                    <th>Open for Recp.</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr
+                                                    *ngFor="let itempo of item.Previous_PO | itempofilter:'PO_Date':'desc' | slice:0:5">
+                                                    <td>{{itempo.PO_No }}</td>
+                                                    <td>{{itempo.Name.substring(0, 15)}}</td>
+                                                    <td>{{itempo.PO_Date | date: 'shortDate' : 'UTC'}}</td>
+                                                    <td>{{itempo.PO_Status}}</td>
+                                                    <td class="no-print">{{itempo.DistribStatus}}</td>
+                                                    <td class="no-print">{{itempo.ReceiptStatus}}</td>
+                                                    <td>{{itempo.PO_Qty}}</td>
+                                                    <td>{{itempo.Amount / itempo.PO_Qty | currency}}</td>
+                                                    <td>{{itempo.Received_Qty}}</td>
+                                                    <td>{{itempo.PO_Qty - itempo.Received_Qty}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </ng-container>
+        </div>
     </div>
-    <!-- <div>
-        <ul>
-            <li *ngFor="let req of reqs">{req.REQ_No}</li>
-        </ul>
-    </div> -->
 </div>
