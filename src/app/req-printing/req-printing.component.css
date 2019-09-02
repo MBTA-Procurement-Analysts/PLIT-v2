@@ -18,3 +18,15 @@
 .req-form {
     margin-bottom: 25px
 }
+
+@media print {
+    .container {
+        margin: auto;
+        width: available;
+    }
+    .req-printing-container {
+        background-color: white;
+        width: auto;
+    }
+     
+}

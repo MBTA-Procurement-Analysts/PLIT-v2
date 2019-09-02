@@ -1,9 +1,9 @@
 <div class="container">
     <div class="req-printing-container">
         <div class="mat-headline">
-            Req Bulk Printing
+            Req Bulk Printing {{userName.value}} {{date.value | date: 'shortDate'}}
         </div>
-        <div class="req-form">
+        <div class="req-form no-print">
             <form [formGroup]="reqPrintingForm" (ngSubmit)="onSubmit()">
                 <div class="row align-items-center">
                     <div class="col-4 d-flex justify-content-between">
@@ -37,7 +37,7 @@
         </div>
 
         <mat-divider></mat-divider>
-        <div class="table-container border p-1 mb-5" *ngFor="let req of reqs">
+        <div class="table-container border p-1 mb-5" *ngFor="let req of reqs; let end = last">
             <ng-container *ngIf="validRequester(req['Requester'])">
                 <div class="row justify-content-between">
                     <div class="col-4">
@@ -149,7 +149,7 @@
                 </div>
                 <div class="mt-1">
                     <mat-accordion multi="true">
-                        <mat-expansion-panel *ngFor="let item of req.Item_Data">
+                        <mat-expansion-panel [expanded]="true" *ngFor="let item of req.Item_Data">
                             <mat-expansion-panel-header>
                                 <u>
                                     {{item.Item_No}}: {{item.Item_Description}}
@@ -298,6 +298,7 @@
                     </mat-accordion>
                 </div>
             </ng-container>
+            <div *ngIf="!end" style="page-break-after: always"></div>
         </div>
     </div>
 </div>
