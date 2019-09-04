@@ -43,7 +43,7 @@ import { TicketComponent } from './ticket/ticket.component';
 import { ReqPrintingComponent } from './req-printing/req-printing.component';
 import { ReqstatusPipe } from './pipes/reqstatus.pipe';
 import { ItemstatusPipe } from './pipes/itemstatus.pipe';
-import { ItempofilterPipe } from './pipes/itempofilter.pipe';
+import { OrderByPipe } from './pipes/orderby.pipe';
 
 @NgModule({
   declarations: [
@@ -64,7 +64,7 @@ import { ItempofilterPipe } from './pipes/itempofilter.pipe';
     ReqPrintingComponent,
     ReqstatusPipe,
     ItemstatusPipe,
-    ItempofilterPipe
+    OrderByPipe
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="req-printing-container">
-        <div class="mat-headline">
+        <div class="mat-title">
             Req Bulk Printing {{userName.value}} {{date.value | date: 'shortDate'}}
         </div>
         <div class="req-form no-print">
@@ -37,7 +37,7 @@
         </div>
 
         <mat-divider></mat-divider>
-        <div class="table-container border p-1 mb-5" *ngFor="let req of reqs; let end = last">
+        <div class="table-container border p-1 mb-5" *ngFor="let req of reqs | orderby:'Buyer':'asc'; let end = last">
             <ng-container *ngIf="validRequester(req['Requester'])">
                 <div class="row justify-content-between">
                     <div class="col-4">
@@ -62,11 +62,11 @@
                                 </tr>
                                 <tr>
                                     <td><b>Page Displayed:</b></td>
-                                    <td>{{"CHANGE ME"}}</td>
+                                    <td>{{ loadDate | date: 'medium' }}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Data Refreshed:</b></td>
-                                    <td>{{"CHANGE ME"}}</td>
+                                    <td>{{reqLU | date: 'medium'}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -74,7 +74,7 @@
 
                     <div class="col-8">
                         <div class="table-responsive">
-                            <table class="tbl-padding table my-0">
+                            <table class="tbl-padding table table-sm my-0">
                                 <tbody>
                                     <tr class="border-top">
                                         <td><b>Date</b></td>
@@ -150,7 +150,8 @@
                 <div class="mt-1">
                     <mat-accordion multi="true">
                         <mat-expansion-panel [expanded]="true" *ngFor="let item of req.Item_Data">
-                            <mat-expansion-panel-header>
+                            <mat-expansion-panel-header class="border">
+                                <mat-icon>double_arrow</mat-icon>
                                 <u>
                                     {{item.Item_No}}: {{item.Item_Description}}
                                 </u>
@@ -163,7 +164,7 @@
                                         {{item.Item_Group.Group_Description}}<br>
                                         <b>UOM:</b> {{item.UOM}}<br>
                                         <b>Added:</b> {{item.Status_Date | date: 'medium'}}<br>
-                                        <b>Data Last Refresh:</b> CHANGE ME <br>
+                                        <b>Data Last Refresh:</b> {{itemLU | date: 'medium'}} <br>
                                         <b>Total Backorder:</b> {{item.Total_Backorder}}<br>
                                         <hr>
                                         <b>Viable Substitute</b>
@@ -277,7 +278,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr
-                                                    *ngFor="let itempo of item.Previous_PO | itempofilter:'PO_Date':'desc' | slice:0:5">
+                                                    *ngFor="let itempo of item.Previous_PO | orderby:'PO_Date':'desc' | slice:0:5">
                                                     <td>{{itempo.PO_No }}</td>
                                                     <td>{{itempo.Name.substring(0, 15)}}</td>
                                                     <td>{{itempo.PO_Date | date: 'shortDate' : 'UTC'}}</td>

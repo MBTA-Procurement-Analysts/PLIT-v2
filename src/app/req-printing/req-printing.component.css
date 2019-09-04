@@ -21,12 +21,13 @@
 
 @media print {
     .container {
-        margin: auto;
-        width: available;
+        padding: 0mm;
+        margin: 0mm 0mm 0mm 0mm !important;
+        max-width: unset;
     }
     .req-printing-container {
         background-color: white;
         width: auto;
+        max-width: unset;
     }
-     
 }

@@ -8,9 +8,26 @@ body, html {
 }
 
 @media print
-{    
+{   
+  
+    @page {
+      margin: 1cm;
+    }
+
     .no-print, .no-print *
     {
         display: none !important;
+    }
+    .container {
+      //font-size: 12pt;
+    }
+
+    table {
+      //font-size: 12pt;
+    }
+
+    body, html {
+      margin-top: -15mm;
+      padding: 0 !important;
     }
 }

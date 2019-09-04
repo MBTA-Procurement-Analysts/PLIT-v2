@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as _ from 'lodash';
 
 @Pipe({
-  name: 'itempofilter'
+  name: 'orderby'
 })
-export class ItempofilterPipe implements PipeTransform {
+export class OrderByPipe implements PipeTransform {
 
   transform(value: any[], column: string, order = ''): any {
     if (!value || !column || column === '' || order === '') { return value; } // no array

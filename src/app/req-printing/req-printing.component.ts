@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ReqService } from '../services/req.service'
-import { ActivatedRoute } from '@angular/router'
+import { ReqService } from '../services/req.service';
+import { LastupdatedService } from '../services/lastupdated.service';
+import { ActivatedRoute, RouteConfigLoadEnd } from '@angular/router'
 import { Req, Lines, User_Notes } from '../models/req';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
@@ -23,24 +24,40 @@ export class ReqPrintingComponent implements OnInit {
   date = new FormControl(new Date());
   userName = new FormControl(new String());
   invBuyers = plenv.invBuyers;
+  reqLU: Date;
+  itemLU: Date;
+  loadDate: Date;
 
   constructor(
     private route: ActivatedRoute,
     private location: Location,
     private reqService: ReqService,
     private authService: AuthService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private luService: LastupdatedService,
   ) { }
 
   ngOnInit() {
+    const gotoinv = this.route.snapshot.queryParamMap.get("inv");
     this.currentUser = this.authService.currentUser;
     this.initialUser = this.authService.initialUser;
-    console.log(this.currentUser.username.toUpperCase())
-    console.log(this.reqs)
     this.reqPrintingForm = this.formBuilder.group({
       userName: this.userName,
       date: this.date
     })
+    if (gotoinv == "1") {
+      this.showINVReqs();
+    }
+    this.luService.getLU("REQ_DATA")
+    .subscribe(res => {
+      console.log(res);
+      this.reqLU = new Date(res[0].last_updated_time * 1000);
+    })
+    this.luService.getLU("ITEM_DATA")
+    .subscribe(res => {
+      this.itemLU = new Date(res[0].last_updated_time * 1000);
+    })
+    this.loadDate = new Date();
   }
 
   getReqPrints() {
@@ -63,6 +80,7 @@ export class ReqPrintingComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.reqLU)
     console.log(this.date);
     console.log(this.userName);
     this.getReqPrints();
@@ -78,7 +96,7 @@ export class ReqPrintingComponent implements OnInit {
   showINVReqs() {
     this.userName.setValue("*INV");
     //TODO: remove this after dev
-    let today: Date = new Date(1565222400000);
+    let today: Date = new Date();
     this.date.setValue(today);
     this.getReqPrints();
   }
