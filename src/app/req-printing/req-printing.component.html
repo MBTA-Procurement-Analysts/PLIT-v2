@@ -1,7 +1,7 @@
 <div class="container">
     <div class="req-printing-container">
         <div class="mat-title">
-            Req Bulk Printing {{userName.value}} {{date.value | date: 'shortDate'}}
+            Req Bulk Printing {{userName.value | uppercase}} {{date.value | date: 'shortDate'}}
         </div>
         <div class="req-form no-print">
             <form [formGroup]="reqPrintingForm" (ngSubmit)="onSubmit()">
@@ -38,7 +38,7 @@
 
         <mat-divider></mat-divider>
         <div class="table-container border p-1 mb-5" *ngFor="let req of reqs | orderby:'Buyer':'asc'; let end = last">
-            <ng-container *ngIf="validRequester(req['Requester'])">
+            <ng-container>
                 <div class="row justify-content-between">
                     <div class="col-4">
                         <h5 class="text-center">Req: {{req['REQ_No']}}</h5>

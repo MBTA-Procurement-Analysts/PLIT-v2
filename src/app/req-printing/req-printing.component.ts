@@ -38,16 +38,12 @@ export class ReqPrintingComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const gotoinv = this.route.snapshot.queryParamMap.get("inv");
     this.currentUser = this.authService.currentUser;
     this.initialUser = this.authService.initialUser;
     this.reqPrintingForm = this.formBuilder.group({
       userName: this.userName,
       date: this.date
     })
-    if (gotoinv == "1") {
-      this.showINVReqs();
-    }
     this.luService.getLU("REQ_DATA")
     .subscribe(res => {
       console.log(res);
@@ -62,27 +58,23 @@ export class ReqPrintingComponent implements OnInit {
 
   getReqPrints() {
     let dateString: string = formatDate(this.date.value, "MM-dd-yyyy", "en-US");
-    console.log(dateString)
     if (this.userName.value == "*INV") {
       this.reqService.getReqPrintAll(dateString)
         .subscribe(reqs => {
           this.reqs = reqs
-          console.log(this.reqs)
         });
     } else {
       this.reqService.getReqPrintUser(dateString, this.userName.value)
         .subscribe(reqs => {
           this.reqs = reqs
-          console.log(this.reqs)
         });
 
     }
   }
 
   onSubmit() {
-    console.log(this.reqLU)
-    console.log(this.date);
-    console.log(this.userName);
+    let inputusername = this.userName.value
+    this.userName.setValue(inputusername.toUpperCase())
     this.getReqPrints();
   }
 
@@ -95,22 +87,12 @@ export class ReqPrintingComponent implements OnInit {
 
   showINVReqs() {
     this.userName.setValue("*INV");
-    //TODO: remove this after dev
     let today: Date = new Date();
     this.date.setValue(today);
     this.getReqPrints();
   }
 
   openPrint() {
-    console.log("print?")
     window.print();
-  }
-
-  validRequester(requester:string) : boolean {
-    return true
-    if (requester.match(/^INVCYCC[24]/)) {
-      return true
-    }
-    return false
   }
 }
