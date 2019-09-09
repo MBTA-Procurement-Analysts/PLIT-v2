@@ -6,7 +6,6 @@ export const environment = {
   production: false,
   apiUrl:
   'http://localhost:3000/api/'
-  // 'http://rubikdata3.com/api/'
 };
 
 /*

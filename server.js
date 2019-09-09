@@ -6,6 +6,7 @@ var passport = require('passport');
 var nodemailer = require('nodemailer');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var sessionSecret = process.env["RUBIXSESSIONSECRET"]
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -13,7 +14,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'));
 
 app.use(cookieParser());
-app.use(session({secret: "this is secret"}));
+app.use(session({secret: sessionSecret}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
