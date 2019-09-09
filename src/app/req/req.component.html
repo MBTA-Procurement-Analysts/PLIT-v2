@@ -79,7 +79,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let all">
-                 <a routerLink="../reqs/{{all.REQ_No}}">
+                 <a routerLink="../reqs/{{all.REQ_No}}/{{all.Business_Unit}}">
                    {{all.REQ_No}}
                  </a>
                </td>
@@ -218,7 +218,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let action">
-                 <a routerLink="../reqs/{{action.REQ_No}}">
+                 <a routerLink="../reqs/{{action.REQ_No}}/{{action.Business_Unit}}">
                    {{action.REQ_No}}
                  </a>
                </td>
@@ -357,7 +357,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let hold">
-                 <a routerLink="../reqs/{{hold.REQ_No}}">
+                 <a routerLink="../reqs/{{hold.REQ_No}}/{{hold.Business_Unit}}">
                    {{hold.REQ_No}}
                  </a>
                </td>
@@ -496,7 +496,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let transmission">
-                 <a routerLink="../reqs/{{transmission.REQ_No}}">
+                 <a routerLink="../reqs/{{transmission.REQ_No}}/{{Business_Unit}}">
                    {{transmission.REQ_No}}
                  </a>
                </td>
@@ -635,7 +635,7 @@
              <ng-container matColumnDef="Req No">
                <th mat-header-cell *matHeaderCellDef> Req No </th>
                <td mat-cell *matCellDef="let out">
-                 <a routerLink="../reqs/{{out.REQ_No}}">
+                 <a routerLink="../reqs/{{out.REQ_No}}/{{out.Business_Unit}}">
                    {{out.REQ_No}}
                  </a>
                </td>

@@ -30,7 +30,7 @@ export class ReqDetailsComponent implements OnInit {
     private formBuilder: FormBuilder
     ) { }
   ngOnInit() {
-    this.interval = setInterval(()=>{    //<<<---    using ()=> syntax
+    this.interval = setInterval(()=>{
       this.getReq()
     }, 1000);
 

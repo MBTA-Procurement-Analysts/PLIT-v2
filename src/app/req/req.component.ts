@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { Dashboard, Lines } from '../models/dashboard';
 import { User } from '../models/user';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Router, RouterEvent, NavigationStart, NavigationEnd } from '@angular/router';
 import { filter, flatMap } from 'rxjs/operators';
 import { ReqService } from '../services/req.service';
 import { Req } from '../models/req';
@@ -62,18 +62,23 @@ export class ReqComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.selectedIndex = 0;
-      this.currentPage = 0;
-      this.getAllUsers();
-      this.reqsLoaded = Promise.resolve(true);
-    });
+    // this.router.events.pipe(
+    //   filter((event: RouterEvent) => event instanceof NavigationStart)
+    // ).subscribe(() => {
+    //   this.selectedIndex = 0;
+    //   this.currentPage = 0;
+    //   this.getAllUsers();
+    //   this.reqsLoaded = Promise.resolve(true);
+    //   console.log("req hit");
+    // });
 
     this.getAllUsers();
     this.reqsLoaded = Promise.resolve(true);
   }
+
+  // ngOnDestroy(): void {
+  //   this.router.dispose();
+  // }
 
   getDataLastUpdated() {
     this.dashboardService.getUpdatedTime().subscribe(
