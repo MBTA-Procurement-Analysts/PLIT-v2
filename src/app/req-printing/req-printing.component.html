@@ -24,9 +24,9 @@
                     </div>
                     <div class="col-7 offset-1 d-flex justify-content-around">
                         <button mat-raised-button color="accent" type="button" (click)="showUserReqs()"><i
-                                class="material-icons">person</i>My REQs Today</button>
+                                class="material-icons">person</i>My REQs Yesterday</button>
                         <button mat-raised-button color="accent" type="button" (click)="showINVReqs()"><i
-                                class="material-icons">people</i>*INV REQs Today</button>
+                                class="material-icons">people</i>*INV REQs Yesterday</button>
                         <button mat-raised-button color="primary" type="submit"><i class="material-icons">search</i>Show
                             REQs</button>
                         <button mat-raised-button color="primary" type="button" (click)="openPrint()"><i
@@ -37,7 +37,7 @@
         </div>
 
         <mat-divider></mat-divider>
-        <div class="table-container border p-1 mb-5" *ngFor="let req of reqs | orderby:'Buyer':'asc'; let end = last">
+        <div class="table-container p-1 mb-5" *ngFor="let req of reqs | orderby:'Buyer':'asc'; let end = last">
             <ng-container>
                 <div class="row justify-content-between">
                     <div class="col-4">
@@ -144,14 +144,11 @@
                         </b>
                     </div>
                 </div>
-                <div class="accordion" id="accordionExample">
-
-                </div>
                 <div class="mt-1">
                     <mat-accordion multi="true">
-                        <mat-expansion-panel [expanded]="true" *ngFor="let item of req.Item_Data">
+                        <mat-expansion-panel [expanded]="true" [togglePosition]="'before'"
+                            *ngFor="let item of req.Item_Data">
                             <mat-expansion-panel-header class="border">
-                                <mat-icon>double_arrow</mat-icon>
                                 <u>
                                     {{item.Item_No}}: {{item.Item_Description}}
                                 </u>
@@ -185,7 +182,7 @@
                                     </div>
                                     <div class="col-6">
                                         <b>Item Storage Area</b>
-                                        <table class="tbl-padding table table-sm">
+                                        <table class="table table-sm">
                                             <thead>
                                                 <tr>
                                                     <th>Business Unit</th>

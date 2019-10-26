@@ -81,14 +81,18 @@ export class ReqPrintingComponent implements OnInit {
   showUserReqs() {
     this.userName.setValue(this.currentUser.username.toUpperCase())
     let today: Date = new Date();
-    this.date.setValue(today);
+    let yesterday = new Date(today.getTime());
+    yesterday.setDate(today.getDate() - 1);
+    this.date.setValue(yesterday);
     this.getReqPrints();
   }
 
   showINVReqs() {
     this.userName.setValue("*INV");
-    let today: Date = new Date();
-    this.date.setValue(today);
+    let today = new Date();
+    let yesterday = new Date(today.getTime());
+    yesterday.setDate(today.getDate() - 1);
+    this.date.setValue(yesterday);
     this.getReqPrints();
   }
 
