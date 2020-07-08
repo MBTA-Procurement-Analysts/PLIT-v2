@@ -4,7 +4,8 @@
       Requisition List
   </div>
   <div class="float-right">
-    <mat-form-field>
+    <mat-form-field appearance="legacy">
+      <mat-icon matPrefix>search</mat-icon>
       <input matInput [(ngModel)]="searchText" placeholder="Search By REQ #" (click)="searchPageSize()">
     </mat-form-field>
   </div>

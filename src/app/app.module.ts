@@ -40,6 +40,10 @@ import { SearchPipe } from './pipes/search.pipe';
 import { PoDetailsComponent } from './po-details/po-details.component';
 import { WorklistComponent } from './worklist/worklist.component';
 import { TicketComponent } from './ticket/ticket.component';
+import { ReqPrintingComponent } from './req-printing/req-printing.component';
+import { ReqstatusPipe } from './pipes/reqstatus.pipe';
+import { ItemstatusPipe } from './pipes/itemstatus.pipe';
+import { OrderByPipe } from './pipes/orderby.pipe';
 
 @NgModule({
   declarations: [
@@ -56,7 +60,11 @@ import { TicketComponent } from './ticket/ticket.component';
     SearchPipe,
     PoDetailsComponent,
     WorklistComponent,
-    TicketComponent
+    TicketComponent,
+    ReqPrintingComponent,
+    ReqstatusPipe,
+    ItemstatusPipe,
+    OrderByPipe
   ],
   imports: [
     BrowserModule,

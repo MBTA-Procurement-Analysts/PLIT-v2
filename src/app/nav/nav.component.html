@@ -1,4 +1,4 @@
-<mat-toolbar *ngIf="router.url !== '/login'" class="mat-elevation-z3">
+<mat-toolbar *ngIf="router.url !== '/login'" class="mat-elevation-z3 no-print">
   <span class="title">PLIT</span>
   <span class="links" [routerLink]="['dashboard']" routerLinkActive="active-link">DASHBOARD</span>
   <span class="links" [routerLink]="['self-service']" routerLinkActive="active-link">SELF-SERVICE</span>
@@ -7,7 +7,7 @@
   <span><a class="material-icons logout black-text" [routerLink]="['login']">exit_to_app</a></span>
 </mat-toolbar>
 
-<div class="sidenav mat-elevation-z3">
+<div class="sidenav mat-elevation-z3 no-print">
   <div *ngIf="router.isActive('dashboard')">
     <a [routerLink]="['dashboard/reqs']" routerLinkActive="active-link-sidenav">
       Req List
@@ -26,6 +26,9 @@
     </a>
     <a [routerLink]="['self-service/ticket']" routerLinkActive="active-link-sidenav">
       Tickets
+    </a>
+    <a [routerLink]="['self-service/req-printing']" routerLinkActive="active-link-sidenav">
+      Req Bulk Printing (3b1s)
     </a>
   </div>
 </div>

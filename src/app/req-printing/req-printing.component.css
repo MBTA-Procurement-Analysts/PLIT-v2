@@ -1,0 +1,33 @@
+.container {
+    margin-left: 200px;
+}
+
+.req-printing-container {
+    padding: 20px;
+    margin-top: 100px;
+    margin-right: 25px;
+    margin-left: 25px;
+    background-color: white;
+    width: calc(100vw - 275px);
+}
+
+.table-container {
+    margin: 5px;
+}
+
+.req-form {
+    margin-bottom: 25px
+}
+
+@media print {
+    .container {
+        padding: 0mm;
+        margin: 0mm 0mm 0mm 0mm !important;
+        max-width: unset;
+    }
+    .req-printing-container {
+        background-color: white;
+        width: auto;
+        max-width: unset;
+    }
+}

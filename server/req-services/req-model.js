@@ -8,6 +8,8 @@ reqModel.getReqsForBuyer = getReqsForBuyer;
 reqModel.getReqsForDate = getReqsForDate;
 reqModel.addFlag = addFlag;
 reqModel.unFlag = unFlag;
+reqModel.getReqsWithItemsForDate = getReqsWithItemsForDate;
+reqModel.getReqsWithItemsForBuyer = getReqsWithItemsForBuyer;
 module.exports = reqModel;
 
 function findReq(reqNumber){
@@ -53,12 +55,42 @@ function getBuyerReqsForDate(buyer, date){
     return reqModel.find({"Buyer": buyer, "Approved_On":  new Date(utcDate)});
 }
 function getReqsForBuyer(buyer) {
-  console.log('getting req for buyer');
   return reqModel.find({"Buyer": buyer});
 }
 function getReqsForDate(date){
     var utcDate = new Date(date)
     utcDate.setTime(utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000);
-    console.log("!!" + new Date(utcDate).toISOString());
     return reqModel.find({"Approved_On":  new Date(utcDate)});
+}
+
+function getReqsWithItemsForDate(date) {
+    var utcDate = new Date(date)
+    utcDate.setTime(utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000);
+    return reqModel.aggregate([
+        {$match: {$and: [{"Approved_On":utcDate}, 
+                         {"Business_Unit": "MBTAI"},
+                         {"Requester": {$regex: /^INVCYCC[24]/}}]}},
+        {$lookup: {
+        from: "ITEM_DATA",
+        localField: "lines.Item",
+        foreignField: "Item_No",
+        as: "Item_Data"}},
+        {$addFields: {"Sum_Amount": {$sum: "$lines.Line_Total"}}}])
+}
+
+function getReqsWithItemsForBuyer(buyer, date) {
+    console.log("getReqsWithItemsForBuyer Called:" + buyer + " " + date)
+    var utcDate = new Date(date)
+    utcDate.setTime(utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000);
+    return reqModel.aggregate([
+        {$match: {$and: [{"Approved_On":utcDate}, 
+                         {"Business_Unit": "MBTAI"}, 
+                         {"Buyer": buyer},
+                         {"Requester": {$regex: /^INVCYCC[24]/}}]}},
+        {$lookup: {
+        from: "ITEM_DATA",
+        localField: "lines.Item",
+        foreignField: "Item_No",
+        as: "Item_Data"}},
+        {$addFields: {"Sum_Amount": {$sum: "$lines.Line_Total"}}}])
 }

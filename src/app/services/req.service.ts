@@ -13,6 +13,8 @@ export class ReqService {
   private addReqFlagUrl = environment.apiUrl + 'req/addFlag/';
   private removeReqFlagUrl = environment.apiUrl + 'req/unFlag/';
   private addNoteUrl = environment.apiUrl + 'add-note/';
+  private reqPrintingAllUrl = environment.apiUrl + 'req-print/';
+  private reqPrintingBuyerUrl = environment.apiUrl + 'req-print/buyer/'
 
   constructor(
     private http: HttpClient
@@ -48,5 +50,13 @@ export class ReqService {
       Date: notes.Date,
       Note_Info: notes.Note_Info
     })
+  }
+
+  getReqPrintAll(date: string): Observable<Req[]> {
+    return this.http.get<Req[]> (this.reqPrintingAllUrl + date);
+  }
+
+  getReqPrintUser(date: string, user: string): Observable<Req[]> {
+    return this.http.get<Req[]> (this.reqPrintingBuyerUrl + user + "/" + date)
   }
 }

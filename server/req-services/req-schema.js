@@ -26,6 +26,7 @@ var reqSchema = new mongoose.Schema(
             "Country": String
         },
         "Status": String,
+        "Sum_Amount": Number,
         "lines": [
             {
                 "Line_No": Number,

@@ -8,6 +8,8 @@ app.post('/api/add-note/:reqId', addNote);
 app.put('/api/req/addFlag/:reqId', addFlag);
 app.put('/api/req/unFlag/:reqId', unFlag);
 app.get('/api/reqs/:buyer', getReqsForBuyer);
+app.get('/api/req-print/:date', getReqsWithItemsForDate)
+app.get('/api/req-print/buyer/:buyer/:date', getReqsWithItemsForBuyer)
 
 function getReqsForBuyer(req, res) {
   reqModel
@@ -73,4 +75,20 @@ function findReq(req,res){
         .then(function(val){
             res.json(val);
         })
+}
+
+function getReqsWithItemsForDate(req, res) {
+    reqModel
+    .getReqsWithItemsForDate(req.params.date)
+    .then(function(val) {
+        res.json(val)
+    })
+}
+
+function getReqsWithItemsForBuyer(req, res) {
+    reqModel
+    .getReqsWithItemsForBuyer(req.params.buyer, req.params.date)
+    .then(function(val) {
+        res.json(val)
+    })
 }

@@ -13,6 +13,7 @@ import { BidDetailsComponent } from './bid-details/bid-details.component';
 import { PoDetailsComponent } from './po-details/po-details.component';
 import { WorklistComponent } from './worklist/worklist.component';
 import { ReqComponent } from './req/req.component';
+import { ReqPrintingComponent } from './req-printing/req-printing.component';
 import { TicketComponent } from './ticket/ticket.component';
 
 const appRoutes: Routes = [
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
   { path: 'dashboard/pos/:id', component: PoDetailsComponent, canActivate: [RoleGuard] },
   { path: 'dashboard/reqs/:id/:unit/worklist', component: WorklistComponent },
   { path: 'dashboard/admin', component: ReqComponent, canActivate: [AuthGuard] },
+  { path: 'self-service/req-printing', component: ReqPrintingComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
 ];
 
