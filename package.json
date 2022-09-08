@@ -30,7 +30,7 @@
     "docxtemplater": "^3.14.1",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
-    "jszip": "^3.2.2",
+    "jszip": "^3.7.0",
     "mongoose": "^5.6.9",
     "morgan": "~1.9.0",
     "node-cron": "^2.0.3",
