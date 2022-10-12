@@ -27,7 +27,7 @@
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
-    "docxtemplater": "^3.14.1",
+    "docxtemplater": "^3.31.4",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
     "jszip": "^3.2.2",
